@@ -14,6 +14,7 @@ import { InventarioPersonalModule } from './inventario-personal/inventario-perso
 @Module({
   controllers: [UsersController, InventarioController, InventarioPersonalController, ProfileController],
   providers: [UsersService, InventarioService, InventarioPersonalService, ProfileService],
-  imports: [ProfileModule, InventarioModule, InventarioPersonalModule]
+  imports: [ProfileModule, InventarioModule, InventarioPersonalModule],
+  exports: [UsersService]
 })
 export class UsersModule {}

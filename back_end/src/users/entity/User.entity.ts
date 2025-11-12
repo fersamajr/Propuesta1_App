@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, JoinColumn } from 'typeorm';
-import { Perfil } from './profile.entity';
+import { Profile } from './profile.entity';
 import { Inventario } from "./inventario.entity";
 import { Pedido } from 'src/pedidos/pedido.entity';
 import { Pago } from 'src/pagos/pago.entity';
@@ -30,9 +30,9 @@ export class Usuario {
     @Column({default : rolUser.admin})
     rol: rolUser;
 
-    @OneToOne(() => Perfil)
+    @OneToOne(() => Profile)
     @JoinColumn()
-    perfil: Perfil;
+    perfil: Profile;
 
     @OneToOne(() => Inventario)
     inventario: Inventario;
