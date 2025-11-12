@@ -10,11 +10,10 @@ export class createInventarioPersonalDto{
     @IsNotEmpty()
     cantidad : number
 
-    @IsString()
     @IsNotEmpty()
     @MinLength(3)
-    cantidadAnterior: string
+    cantidadAnterior: number
 
     @IsOptional()
-    fechaAnterior?: string
+    fechaAnterior?: Date
 }

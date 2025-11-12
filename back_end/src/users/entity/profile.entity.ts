@@ -2,7 +2,7 @@ import { Entity , PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, OneToMan
 import { Usuario } from "./User.entity";
 
 @Entity()
-export class Perfil {
+export class Profile {
     @PrimaryGeneratedColumn()
     id: number;
 

@@ -10,11 +10,10 @@ export class updateInventarioPersonalDto{
     @IsOptional()
     cantidad? : number
 
-    @IsString()
     @MinLength(3)
     @IsOptional()
-    cantidadAnterior?: string
+    cantidadAnterior?: number
 
     @IsOptional()
-    fechaAnterior?: string
+    fechaAnterior?: Date
 }

@@ -13,6 +13,7 @@ import { LogsService } from './logs/logs.service';
 import { LogsModule } from './logs/logs.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+
 @Module({
   imports: [UsersModule, PagosModule, PedidosModule, SolicitudPedidosModule, PrediccionesModule, LogsModule, TypeOrmModule.forRoot({
       type: 'mysql',
