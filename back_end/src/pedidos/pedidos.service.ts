@@ -24,7 +24,7 @@ export class PedidosService {
     }
 
     async findAll() {
-        return this.pedidosRepository.find({ relations: ["user"] });
+        return this.pedidosRepository.find();
     }
 
     async findOne(id: number) {
