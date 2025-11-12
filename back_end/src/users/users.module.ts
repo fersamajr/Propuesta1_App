@@ -1,20 +1,23 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import { InventarioService } from './inventario/inventario.service';
-import { InventarioPersonalService } from './inventario-personal/inventario-personal.service';
-import { ProfileService } from './profile/profile.service';
-import { InventarioController } from './inventario/inventario.controller';
-import { InventarioPersonalController } from './inventario-personal/inventario-personal.controller';
-import { ProfileController } from './profile/profile.controller';
-import { ProfileModule } from './profile/profile.module';
+import { Usuario } from './entity/User.entity'; // Ajusta el path/nombre si tu entidad cambia
+
+// Si también tienes submódulos propios con entidades, agrégalos igual que abajo
 import { InventarioModule } from './inventario/inventario.module';
 import { InventarioPersonalModule } from './inventario-personal/inventario-personal.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
-  controllers: [UsersController, InventarioController, InventarioPersonalController, ProfileController],
-  providers: [UsersService, InventarioService, InventarioPersonalService, ProfileService],
-  imports: [ProfileModule, InventarioModule, InventarioPersonalModule],
-  exports: [UsersService]
+  imports: [
+    TypeOrmModule.forFeature([Usuario]),
+    InventarioModule,
+    InventarioPersonalModule,
+    ProfileModule
+  ],
+  controllers: [UsersController],
+  providers: [UsersService],
+  exports: [UsersService],
 })
 export class UsersModule {}
