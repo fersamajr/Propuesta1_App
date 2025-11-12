@@ -9,11 +9,13 @@ import { uptadeUserDto } from './dto/updateUser.dto';
 export class UsersService {
     constructor(@InjectRepository(Usuario) private repo: Repository<Usuario>) {}
 
-    async create(id: number, dto: createUserDto) {
-        const existe = await this.repo.findOne({ where: { id } });
-        if (existe) throw new HttpException('Ya existe usuario con ese id', HttpStatus.CONFLICT);
-        const nuevo = this.repo.create({ ...dto, id });
-        return this.repo.save(nuevo);
+    async create(dto: createUserDto) {
+        const userFound = await this.repo.findOne({ where: { username: dto.username } });
+        if(userFound){
+            return new HttpException("User already exits", HttpStatus.CONFLICT)
+        }
+        const newUser = this.repo.create(dto)
+        return this.repo.save(newUser)
     }
 
     async update(id: number, dto: uptadeUserDto) {

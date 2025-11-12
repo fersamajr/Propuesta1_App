@@ -13,9 +13,9 @@ export class UsersController {
     @Get(':id')
     getById(@Param('id') id: number) { return this.service.getUser(Number(id)); }
 
-    @Post(':id')
-    create(@Param('id') id: number, @Body() dto: createUserDto) {
-        return this.service.create(Number(id), dto);
+    @Post()
+    create(@Body() dto: createUserDto) {
+        return this.service.create(dto);
     }
 
     @Patch(':id')

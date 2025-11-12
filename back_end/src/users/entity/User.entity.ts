@@ -27,7 +27,7 @@ export class Usuario {
     @Column({type : 'datetime', default : () => 'CURRENT_TIMESTAMP'})
     createdAt : Date
 
-    @Column({default : rolUser.admin})
+    @Column({default : rolUser.cliente})
     rol: rolUser;
 
     @OneToOne(() => Profile)
