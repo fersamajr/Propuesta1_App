@@ -11,7 +11,7 @@ export class UsersController {
     getAll() { return this.service.findAll(); }
 
     @Get(':id')
-    getById(@Param('id') id: number) { return this.service.findOne(Number(id)); }
+    getById(@Param('id') id: number) { return this.service.getUser(Number(id)); }
 
     @Post(':id')
     create(@Param('id') id: number, @Body() dto: createUserDto) {

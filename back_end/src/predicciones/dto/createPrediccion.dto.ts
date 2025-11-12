@@ -14,4 +14,7 @@ export class createPrediccionDto{
 
     @IsOptional()
     asociadaAPedido: boolean
+
+    @IsNumber()
+    usuarioId : number
 }

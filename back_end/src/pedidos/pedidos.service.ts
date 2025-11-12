@@ -15,7 +15,7 @@ export class PedidosService {
 
     async createPedido(dto: createPedidoDto) {
         // Verificamos la existencia del usuario antes de crear pedido
-        const user = await this.usersService.getUser(dto.userId);
+        const user = await this.usersService.getUser(dto.usuarioId);
         if (!user) {
         throw new HttpException("User not found", HttpStatus.NOT_FOUND);
         }

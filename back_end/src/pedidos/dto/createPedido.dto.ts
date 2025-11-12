@@ -13,4 +13,7 @@ export class createPedidoDto{
 
     @IsOptional()
     notas?: string
+
+    @IsNumber()
+    usuarioId : number
 }

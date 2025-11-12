@@ -5,7 +5,7 @@ import { UsersModule } from './users/users.module';
 import { PagosModule } from './pagos/pagos.module';
 import { PedidosController } from './pedidos/pedidos.controller';
 import { PedidosModule } from './pedidos/pedidos.module';
-import { SolicitudPedidoController } from './solicitud-pedidos/solicitud-pedido.controller';
+import { SolicitudPedidosController } from './solicitud-pedidos/solicitud-pedido.controller';
 import { SolicitudPedidosModule } from './solicitud-pedidos/solicitud-pedidos.module';
 import { PrediccionesModule } from './predicciones/predicciones.module';
 import { LogsController } from './logs/logs.controller';
@@ -25,7 +25,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       entities: [__dirname + '/**/*entity{.ts,.js}'],
       synchronize: true,
     })],
-  controllers: [AppController, PedidosController, SolicitudPedidoController, LogsController],
+  controllers: [AppController, PedidosController, SolicitudPedidosController, LogsController],
   providers: [AppService, LogsService],
 })
 export class AppModule {}

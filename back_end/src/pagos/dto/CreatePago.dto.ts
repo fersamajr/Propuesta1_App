@@ -8,4 +8,7 @@ export class createPagoDto{
     @IsNumber()
     @IsNotEmpty()
     cantidad: number;
+
+    @IsNumber()
+    usuarioId : number
 }
