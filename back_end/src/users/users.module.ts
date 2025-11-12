@@ -1,10 +1,9 @@
+// src/users/users.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import { Usuario } from './entity/User.entity'; // Ajusta el path/nombre si tu entidad cambia
-
-// Si también tienes submódulos propios con entidades, agrégalos igual que abajo
+import { Usuario } from './entity/User.entity';
 import { InventarioModule } from './inventario/inventario.module';
 import { InventarioPersonalModule } from './inventario-personal/inventario-personal.module';
 import { ProfileModule } from './profile/profile.module';
@@ -14,10 +13,10 @@ import { ProfileModule } from './profile/profile.module';
     TypeOrmModule.forFeature([Usuario]),
     InventarioModule,
     InventarioPersonalModule,
-    ProfileModule
+    ProfileModule,
   ],
   controllers: [UsersController],
   providers: [UsersService],
-  exports: [UsersService],
+  exports: [UsersService], // <--- Obligatorio exportar
 })
 export class UsersModule {}

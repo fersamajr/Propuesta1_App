@@ -1,10 +1,15 @@
-import { Module } from '@nestjs/common';
+// src/solicitud-pedidos/solicitud-pedidos.module.ts
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SolicitudPedidosService } from './solicitud-pedidos.service';
-import { SolicitudPedido } from './solicitud-pedido.entity'; // Ajusta el nombre y path de la entidad si cambia
+import { SolicitudPedido } from './solicitud-pedido.entity';
+import { UsersModule } from '../users/users.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([SolicitudPedido])],
+  imports: [
+    TypeOrmModule.forFeature([SolicitudPedido]),
+    forwardRef(() => UsersModule), // <--- Importar módulo
+  ],
   providers: [SolicitudPedidosService],
   exports: [SolicitudPedidosService],
 })
