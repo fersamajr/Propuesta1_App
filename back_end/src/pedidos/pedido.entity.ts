@@ -10,9 +10,9 @@ export class Pedido {
     @ManyToOne(() => Usuario, usuario => usuario.pedidos)
     usuario: Usuario;
 
-    @OneToOne(()=> SolicitudPedido)
-    @JoinColumn()
-    solicitudId:SolicitudPedido;
+    // @OneToOne(()=> SolicitudPedido)
+    // @JoinColumn()
+    // solicitudId:SolicitudPedido;
 
     @Column({type: "datetime", nullable : true})
     fechaEntrega: Date;

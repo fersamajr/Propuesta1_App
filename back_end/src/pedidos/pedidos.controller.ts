@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import { createPedidoDto } from './dto/createPedido.dto';
 import { updatePedidoDto } from './dto/updatePedido.dto';
 import { PedidosService } from './pedidos.service';
@@ -7,9 +7,9 @@ import { PedidosService } from './pedidos.service';
 export class PedidosController {
     constructor(private pedidosService: PedidosService) {}
 
-    @Post()
-    createPedido(@Body() dto: createPedidoDto) {
-        return this.pedidosService.createPedido(dto);
+    @Post(":id")
+    createPedido(@Param("id",ParseIntPipe)id :number,@Body() dto: createPedidoDto) {
+        return this.pedidosService.createPedido(id,dto);
     }
 
     @Get()

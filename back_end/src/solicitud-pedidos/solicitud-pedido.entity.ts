@@ -1,5 +1,6 @@
 import { Entity , PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, OneToMany, ManyToOne} from "typeorm";
 import { Usuario } from "src/users/entity/User.entity";
+import { Pedido } from "src/pedidos/pedido.entity";
 
 @Entity()
 export class SolicitudPedido {
@@ -29,4 +30,8 @@ export class SolicitudPedido {
 
     @Column({ default: false })
     confirmado: boolean;
+
+    @OneToOne(()=> Pedido)
+    @JoinColumn()
+    Pedido : Pedido;
 }

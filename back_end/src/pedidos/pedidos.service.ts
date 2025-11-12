@@ -5,26 +5,36 @@ import { Pedido } from './pedido.entity';
 import { createPedidoDto } from './dto/createPedido.dto';
 import { updatePedidoDto } from './dto/updatePedido.dto';
 import { UsersService } from 'src/users/users.service';
+import { SolicitudPedidosService } from 'src/solicitud-pedidos/solicitud-pedidos.service';
+import { SolicitudPedido } from 'src/solicitud-pedidos/solicitud-pedido.entity';
 
 @Injectable()
 export class PedidosService {
     constructor(
         private usersService: UsersService,
         @InjectRepository(Pedido) private pedidosRepository: Repository<Pedido>,
+        private solicitudService: SolicitudPedidosService,
+        @InjectRepository(SolicitudPedido) private solicitudRepository: Repository<SolicitudPedido>,
     ) {}
 
-    async createPedido(dto: createPedidoDto) {
+    async createPedido(id: number,dto: createPedidoDto) {
         // Verificamos la existencia del usuario antes de crear pedido
         const user = await this.usersService.getUser(dto.usuarioId);
         if (!user) {
         throw new HttpException("User not found", HttpStatus.NOT_FOUND);
         }
-        const pedido = this.pedidosRepository.create(dto);
-        return this.pedidosRepository.save(pedido);
+
+        const solicitudPedidoFound = await this.solicitudRepository.findOne({where: {id}})
+        if(!solicitudPedidoFound){
+            throw new HttpException("Solicitud not found", HttpStatus.NOT_FOUND);}
+        const newPedido = this.pedidosRepository.create(dto);
+        const savedPediddo = await this.pedidosRepository.save(newPedido)
+        solicitudPedidoFound.Pedido = savedPediddo
+        return this.pedidosRepository.save(newPedido);
     }
 
     async findAll() {
-        return this.pedidosRepository.find();
+        return this.pedidosRepository.find({relations:["usuario"]});
     }
 
     async findOne(id: number) {
