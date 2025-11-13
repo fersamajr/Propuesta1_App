@@ -23,4 +23,8 @@ export class Profile {
 
     @Column({nullable:true})
     notas: string;
+
+    @OneToOne(() => Usuario, usuario => usuario.perfil)
+    usuario: Usuario;
+
 }
