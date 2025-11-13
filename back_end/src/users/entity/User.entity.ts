@@ -34,11 +34,14 @@ export class Usuario {
     @JoinColumn()
     perfil: Profile;
 
-    @OneToOne(() => Inventario)
+    @OneToOne(() => Inventario, inventario => inventario.usuario)
+    @JoinColumn()
     inventario: Inventario;
 
-    @OneToOne(() => InventarioPersonal)
+    @OneToOne(() => InventarioPersonal, inventarioPersonal => inventarioPersonal.usuario)
+    @JoinColumn()
     inventarioPersonal: InventarioPersonal;
+
 
     @OneToMany(() => Pedido, pedido => pedido.usuario)
     pedidos: Pedido[];

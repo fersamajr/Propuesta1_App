@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from "typeorm";
+import { Usuario } from "./User.entity";
 
 
 @Entity()
@@ -14,5 +15,8 @@ export class Inventario {
 
     @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
     updatedAt: Date;
+
+    @OneToOne(()=> Usuario,usuario => usuario.inventario)
+    usuario: Usuario;
 }
 

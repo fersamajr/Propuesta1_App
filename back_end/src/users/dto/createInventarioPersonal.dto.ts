@@ -11,7 +11,7 @@ export class createInventarioPersonalDto{
     cantidad : number
 
     @IsNotEmpty()
-    @MinLength(3)
+    @MinLength(1)
     cantidadAnterior: number
 
     @IsOptional()

@@ -4,17 +4,26 @@ import { Repository } from 'typeorm';
 import { InventarioPersonal } from '../entity/inventarioPersonal.entity';
 import { createInventarioPersonalDto } from '../dto/createInventarioPersonal.dto';
 import { updateInventarioPersonalDto } from '../dto/updateInventarioPersonal.dto';
+import { Usuario } from '../entity/User.entity';
 
 @Injectable()
 export class InventarioPersonalService {
-    constructor(@InjectRepository(InventarioPersonal) private repo: Repository<InventarioPersonal>) {}
+    constructor(@InjectRepository(InventarioPersonal) private repo: Repository<InventarioPersonal>,
+                @InjectRepository(Usuario) private userRepo: Repository<Usuario>) {}
 
-    async create(id: number, dto: createInventarioPersonalDto) {
-        // Una sola entidad por usuario, lógica de unicidad aquí si se requiere
-        const existe = await this.repo.findOne({ where: { id } });
-        if (existe) throw new HttpException('Ya existe InventarioPersonal para ese usuario', HttpStatus.CONFLICT);
-        const nuevo = this.repo.create({ ...dto, id });
-        return this.repo.save(nuevo);
+    async create(userId: number, dto: createInventarioPersonalDto) {
+        const usuario = await this.userRepo.findOne({ where: { id: userId } });
+        if (!usuario) throw new Error("Usuario no existe");
+
+        // 1. Crear y guardar el inventario
+        const nuevoInventario = this.repo.create(dto);
+        await this.repo.save(nuevoInventario);
+
+        // 2. Relacionar usuario y inventario
+        usuario.inventarioPersonal = nuevoInventario;
+        await this.userRepo.save(usuario);
+
+        return nuevoInventario;
     }
 
     async update(id: number, dto: updateInventarioPersonalDto) {
@@ -25,11 +34,11 @@ export class InventarioPersonalService {
     }
 
     async findAll() {
-        return this.repo.find();
+        return this.repo.find({relations: ["usuario"]}); 
     }
 
     async findOne(id: number) {
-        const encontrado = await this.repo.findOne({ where: { id } });
+        const encontrado = await this.repo.findOne({ where: { id }, relations:["usuario"]});
         if (!encontrado) throw new HttpException('InventarioPersonal no encontrado', HttpStatus.NOT_FOUND);
         return encontrado;
     }

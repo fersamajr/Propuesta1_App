@@ -34,10 +34,12 @@ export class ProfileService {
         return this.repo.findOne({ where: { id } });
     }
 
-    async findAll() { return this.repo.find(); }
+    async findAll() {
+        return this.repo.find({relations: ["usuario"]}); 
+    }
 
     async findOne(id: number) {
-        const perfil = await this.repo.findOne({ where: { id } });
+        const perfil = await this.repo.findOne({ where: { id }, relations:["usuario"]});
         if (!perfil) throw new HttpException('Profile no encontrada', HttpStatus.NOT_FOUND);
         return perfil;
     }

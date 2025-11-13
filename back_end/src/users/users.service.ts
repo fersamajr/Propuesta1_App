@@ -25,10 +25,10 @@ export class UsersService {
         return this.repo.findOne({ where: { id } });
     }
 
-    async findAll() { return this.repo.find({relations:["perfil"]}); }
+    async findAll() { return this.repo.find({relations:["perfil","inventarioPersonal","inventario"]}); }
 
     async getUser(id: number) {
-        const usuario = await this.repo.findOne({ where: { id } });
+        const usuario = await this.repo.findOne({ where: { id }, relations:["perfil","inventarioPersonal"]});
         if (!usuario) throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
         return usuario;
     }
