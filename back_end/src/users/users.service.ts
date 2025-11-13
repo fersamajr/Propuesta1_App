@@ -25,7 +25,7 @@ export class UsersService {
         return this.repo.findOne({ where: { id } });
     }
 
-    async findAll() { return this.repo.find({relations:["perfil","inventarioPersonal","inventario"]}); }
+    async findAll() { return this.repo.find({relations:["perfil","inventarioPersonal","inventario","pagos"]}); }
 
     async getUser(id: number) {
         const usuario = await this.repo.findOne({ where: { id }, relations:["perfil","inventarioPersonal"]});
