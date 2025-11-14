@@ -7,9 +7,9 @@ import { PedidosService } from './pedidos.service';
 export class PedidosController {
     constructor(private pedidosService: PedidosService) {}
 
-    @Post(":id")
-    createPedido(@Param("id",ParseIntPipe)id :number,@Body() dto: createPedidoDto) {
-        return this.pedidosService.createPedido(id,dto);
+    @Post()
+    createPedido(@Body() dto: createPedidoDto) {
+        return this.pedidosService.createPedido(dto);
     }
 
     @Get()

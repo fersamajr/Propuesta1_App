@@ -16,4 +16,7 @@ export class createPedidoDto{
 
     @IsNumber()
     usuarioId : number
+
+    @IsNumber()
+    solicitudId : number
 }

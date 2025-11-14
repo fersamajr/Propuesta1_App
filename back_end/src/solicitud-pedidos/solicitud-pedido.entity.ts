@@ -7,7 +7,7 @@ export class SolicitudPedido {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Usuario, usuario => usuario.pedidos)
+    @ManyToOne(() => Usuario)
     usuario: Usuario;
 
     @Column({nullable : true})
@@ -31,7 +31,8 @@ export class SolicitudPedido {
     @Column({ default: false })
     confirmado: boolean;
 
-    @OneToOne(()=> Pedido)
+    @OneToOne(() => Pedido, { onDelete: 'CASCADE' })
     @JoinColumn()
-    Pedido : Pedido;
+    pedido: Pedido | null;
+
 }

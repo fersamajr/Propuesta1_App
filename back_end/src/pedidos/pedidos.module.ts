@@ -15,6 +15,6 @@ import { SolicitudPedido } from 'src/solicitud-pedidos/solicitud-pedido.entity';
   ],
   controllers: [PedidosController],
   providers: [PedidosService],
-  exports: [PedidosService],
+  exports: [PedidosService,PedidosModule],
 })
 export class PedidosModule {}

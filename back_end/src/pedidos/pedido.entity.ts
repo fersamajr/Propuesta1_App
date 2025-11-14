@@ -10,9 +10,9 @@ export class Pedido {
     @ManyToOne(() => Usuario, usuario => usuario.pedidos)
     usuario: Usuario;
 
-    // @OneToOne(()=> SolicitudPedido)
-    // @JoinColumn()
-    // solicitudId:SolicitudPedido;
+    @OneToOne(()=> SolicitudPedido,{ cascade: true, onDelete: 'CASCADE' })
+    @JoinColumn()
+    solicitudPedido:SolicitudPedido;
 
     @Column({type: "datetime", nullable : true})
     fechaEntrega: Date;
@@ -23,9 +23,9 @@ export class Pedido {
     @Column({default : false})
     pagado: boolean;
 
-    @OneToOne(()=> Prediccion)
+    @OneToOne(()=> Prediccion,prediccion => prediccion.pedido)
     @JoinColumn()
-    Prediccion :Prediccion;
+    prediccion :Prediccion;
 
     @Column({nullable : true})
     notas: string;

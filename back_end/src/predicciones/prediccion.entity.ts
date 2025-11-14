@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne } from 'typeorm';
 import { Usuario } from 'src/users/entity/User.entity';
+import { Pedido } from 'src/pedidos/pedido.entity';
 @Entity()
 export class Prediccion {
     @PrimaryGeneratedColumn()
@@ -14,9 +15,9 @@ export class Prediccion {
     @Column()
     fecha: Date;
 
-    @Column({nullable : true})
-    pedidoId: number;
-
     @Column({default:false})
     asociadaAPedido: boolean;
+
+    @OneToOne(()=> Pedido,pedido => pedido.prediccion)
+    pedido: Pedido;
 }

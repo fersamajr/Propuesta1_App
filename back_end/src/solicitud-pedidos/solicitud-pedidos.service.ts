@@ -26,13 +26,13 @@ export class SolicitudPedidosService {
     }
 
     findAll() {
-        return this.solicitudesRepo.find({ relations: ['usuario'] });
+        return this.solicitudesRepo.find({ relations: ['usuario',"pedido"] });
     }
 
     async findOne(id: number) {
         const solicitud = await this.solicitudesRepo.findOne({
         where: { id },
-        relations: ['usuario'],
+        relations: ['usuario',"Pedido"],
         });
         if (!solicitud) {
         throw new HttpException('Solicitud-Pedido no encontrada', HttpStatus.NOT_FOUND);

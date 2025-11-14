@@ -5,25 +5,47 @@ import { Prediccion } from './prediccion.entity';
 import { createPrediccionDto } from './dto/createPrediccion.dto';
 import { updatePrediccionDto } from './dto/updatePrediccion.dto';
 import { UsersService } from 'src/users/users.service';
+import { Usuario } from 'src/users/entity/User.entity';
+import { Pedido } from 'src/pedidos/pedido.entity';
 
 @Injectable()
 export class PrediccionesService {
     constructor(
         private usersService: UsersService,
         @InjectRepository(Prediccion) private prediccionesRepository: Repository<Prediccion>,
+        @InjectRepository(Pedido) private pedidoRepo: Repository<Pedido>
     ) {}
 
     async create(dto: createPrediccionDto) {
+        // Buscar el pedido por ID
+        const pedido = await this.pedidoRepo.findOne({ where: { id: dto.pedidoId } });
+        if (!pedido) {
+            throw new Error("Pedido no existe");
+        }
+
+        // Buscar el usuario por ID
         const user = await this.usersService.getUser(dto.usuarioId);
         if (!user) {
-        throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
+            throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
         }
+
+        // Crear la predicción a partir del DTO y el usuario encontrado
         const prediccion = this.prediccionesRepository.create({
-        ...dto,
-        usuario: user,
+            ...dto,
+            usuario: user,
         });
-        return this.prediccionesRepository.save(prediccion);
+
+        // Guardar primero la predicción
+        const prediccionGuardada = await this.prediccionesRepository.save(prediccion);
+
+        // Asociar la predicción guardada al pedido y guardar el pedido
+        pedido.prediccion = prediccionGuardada;
+        await this.pedidoRepo.save(pedido);
+
+        // Retornar la predicción guardada
+        return prediccionGuardada;
     }
+
 
     findAll() {
         return this.prediccionesRepository.find({ relations: ['usuario'] });
