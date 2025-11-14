@@ -6,6 +6,8 @@ import { Pedido } from './pedido.entity';
 import { UsersModule } from '../users/users.module';
 import { SolicitudPedidosModule } from '../solicitud-pedidos/solicitud-pedidos.module';
 import { SolicitudPedido } from 'src/solicitud-pedidos/solicitud-pedido.entity';
+import { MailService } from 'src/mail/mail.service';
+
 
 @Module({
   imports: [
@@ -14,7 +16,7 @@ import { SolicitudPedido } from 'src/solicitud-pedidos/solicitud-pedido.entity';
     forwardRef(() => SolicitudPedidosModule),
   ],
   controllers: [PedidosController],
-  providers: [PedidosService],
+  providers: [PedidosService,MailService],
   exports: [PedidosService,PedidosModule],
 })
 export class PedidosModule {}

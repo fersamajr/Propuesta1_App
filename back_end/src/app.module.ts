@@ -7,6 +7,8 @@ import { PedidosModule } from './pedidos/pedidos.module';
 import { SolicitudPedidosModule } from './solicitud-pedidos/solicitud-pedidos.module';
 import { PrediccionesModule } from './predicciones/predicciones.module';
 import { LogsModule } from './logs/logs.module';
+import { MailService } from './mail/mail.service';
+
 
 @Module({
   imports: [
@@ -27,5 +29,7 @@ import { LogsModule } from './logs/logs.module';
       synchronize: true,
     }),
   ],
+  providers: [MailService],
+
 })
 export class AppModule {}

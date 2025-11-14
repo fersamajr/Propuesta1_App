@@ -2,19 +2,47 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from 
 import { createPedidoDto } from './dto/createPedido.dto';
 import { updatePedidoDto } from './dto/updatePedido.dto';
 import { PedidosService } from './pedidos.service';
+import { MailService } from 'src/mail/mail.service';
+import { UsersService } from 'src/users/users.service';
 
 @Controller('pedidos')
 export class PedidosController {
-    constructor(private pedidosService: PedidosService) {}
+    constructor(private pedidosService: PedidosService,
+                private readonly mailService: MailService,
+                private usersService: UsersService
+    ) {}
 
+    // en tu controller
     @Post()
-    createPedido(@Body() dto: createPedidoDto) {
-        return this.pedidosService.createPedido(dto);
+    async createPedido(@Body() dto: createPedidoDto) {
+    const pedido = await this.pedidosService.createPedido(dto);
+
+    // Consulta al usuario con perfil ya incluido
+    const user = await this.usersService.getUser(Number(dto.usuarioId));
+
+    // Obtén los datos del perfil
+    const nombre = user.perfil.firstname;        // o 'nombre', según tu campo real
+    const direccion = user.perfil.restaurante;     // o cualquier otro campo
+    const email = user.perfil.direccion;             // campo de email real
+
+    // Cuerpo del mensaje
+    const bodyMsg = `Hola ${nombre}, tu pedido fue registrado y se entregará a ${direccion}.`;
+    console.log('Email destinatario:', email);
+    // Envía el correo
+    if (!email) {
+    throw new Error('El usuario no tiene email definido en su perfil');
+    }
+    await this.mailService.sendMail(email, 'Confirmación de pedido', bodyMsg);
+
+    return pedido;
     }
 
+
+
     @Get()
-    getPedidos() {
-        return this.pedidosService.findAll();
+    async getPedidos() {
+        const get = await this.pedidosService.findAll();
+        return get
     }
 
     @Get(':id')

@@ -7,6 +7,7 @@ import { UsersModule } from '../users/users.module';
 import { SolicitudPedidosController } from './solicitud-pedido.controller';
 import { PedidosModule } from 'src/pedidos/pedidos.module';
 import { PedidosController } from 'src/pedidos/pedidos.controller';
+import { MailService } from 'src/mail/mail.service';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { PedidosController } from 'src/pedidos/pedidos.controller';
 
   ],
   controllers: [SolicitudPedidosController],
-  providers: [SolicitudPedidosService],
+  providers: [SolicitudPedidosService,MailService],
   exports: [SolicitudPedidosService],
 })
 export class SolicitudPedidosModule {}
