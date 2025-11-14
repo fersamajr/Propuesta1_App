@@ -25,6 +25,7 @@ export class SolicitudPedidosController {
         const nombre = user.perfil.firstname;       // o 'nombre'
         const direccion = user.perfil.restaurante;    // si aplica
         const email = user.perfil.direccion;            // el campo real de email
+        const emailAdmin = "Cipxiaomi55@gmail.com"
         // 4. Valida el email
         if (!email) {
         throw new Error('El usuario no tiene email definido en su perfil');
@@ -35,14 +36,28 @@ export class SolicitudPedidosController {
         Cantidad Grano: ${dto.grano}
         Cantidad Molido: ${dto.molido}
         Fecha de entrega: ${dto.fechaEntrega}
+        Notas adcionales: ${dto.notas}
         Te confirmaremos tu pedido en breve.`;
 
+        const MsgAdmin = 
+        `Solicitud de pedido creada favor de confirmarla para ${direccion}.
+        Descripcion del pedido
+        User:  ${dto.usuarioId}
+        Cantidad Grano: ${dto.grano}
+        Cantidad Molido: ${dto.molido}
+        Fecha de entrega: ${dto.fechaEntrega}
+        Notas: ${dto.notas}`
 
         // 6. Envía el correo
         await this.mailService.sendMail(
         email,
         'Confirmación de solicitud de pedido',
         bodyMsg
+        );
+        await this.mailService.sendMail(
+        emailAdmin,
+        'Confirmación de solicitud de pedido',
+        MsgAdmin
         );
         return solicitud;
     }
