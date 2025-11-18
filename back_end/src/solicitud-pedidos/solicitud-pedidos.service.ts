@@ -13,13 +13,15 @@ export class SolicitudPedidosService {
         @InjectRepository(SolicitudPedido) private solicitudesRepo: Repository<SolicitudPedido>,
     ) {}
 
-    async create(dto: createSolicitudPedidoDto) {
-        const user = await this.usersService.getUser(dto.usuarioId);
+    // ******* MÉTODO CREATE MODIFICADO *******
+    async create(userId: string, dto: createSolicitudPedidoDto) { // Recibe el userId del token
+        const user = await this.usersService.getUser(userId); // Usa el userId directamente
         if (!user) {
         throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
         }
         const solicitud = this.solicitudesRepo.create({
         ...dto,
+        usuarioId: userId, // Asigna el userId
         usuario: user,
         });
         return this.solicitudesRepo.save(solicitud);
@@ -28,7 +30,6 @@ export class SolicitudPedidosService {
     findAll() {
         return this.solicitudesRepo.find({ relations: ['usuario',"pedido"] });
     }
-
     async findOne(id: string) {
         const solicitud = await this.solicitudesRepo.findOne({
         where: { id },
@@ -56,5 +57,12 @@ export class SolicitudPedidosService {
         }
         await this.solicitudesRepo.delete(id);
         return { deleted: true, id };
+    }
+        // ******* NUEVO MÉTODO PARA BUSCAR MIS SOLICITUDES *******
+    async findByUsuarioId(usuarioId: string) {
+        return this.solicitudesRepo.find({ 
+        where: { usuarioId },
+        relations: ['usuario'], // Opcional: para traer los datos del usuario que la creó
+        });
     }
 }

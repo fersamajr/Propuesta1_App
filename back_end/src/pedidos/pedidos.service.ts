@@ -100,5 +100,12 @@ export class PedidosService {
     await this.pedidosRepository.delete(id);
     return { deleted: true, id };
     }
-
+    // 🆕 NUEVO MÉTODO: Encontrar pedidos por ID de usuario
+    async findByUsuarioId(usuarioId: string) {
+        return this.pedidosRepository.find({
+            where: { usuarioId }, // Filtrar por el ID de usuario
+            relations: ["usuario", "prediccion", "solicitudPedido"],
+            order: { createdAt: 'DESC' }
+        });
+    }
 }

@@ -21,5 +21,4 @@ export class createSolicitudPedidoDto{
     @IsOptional()
     confirmado?:boolean
 
-    usuarioId : string
 }

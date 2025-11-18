@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, Request } from '@nestjs/common';
 import { createPedidoDto } from './dto/createPedido.dto';
 import { updatePedidoDto } from './dto/updatePedido.dto';
 import { PedidosService } from './pedidos.service';
 import { MailService } from 'src/mail/mail.service';
 import { UsersService } from 'src/users/users.service';
-
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+@UseGuards(JwtAuthGuard)
 @Controller('pedidos')
 export class PedidosController {
     constructor(private pedidosService: PedidosService,
@@ -37,7 +38,12 @@ export class PedidosController {
     return pedido;
     }
 
-
+    // 🆕 NUEVA RUTA PROTEGIDA: Obtener mis pedidos
+    @Get('me')
+    async getMyPedidos(@Request() req) {
+        const userId = req.user.userId; // Extraer el userId del token JWT
+        return this.pedidosService.findByUsuarioId(userId); // Llamar al nuevo método del servicio
+    }
 
     @Get()
     async getPedidos() {
