@@ -22,9 +22,9 @@ export class SolicitudPedidosController {
         const user = await this.usersService.getUser(Number(dto.usuarioId)); // Usa el método con relaciones
 
         // 3. Extrae los datos del perfil (ajusta el nombre de las propiedades)
-        const nombre = user.perfil.firstname;       // o 'nombre'
-        const direccion = user.perfil.restaurante;    // si aplica
-        const email = user.perfil.direccion;            // el campo real de email
+        const nombre = user.perfil.firstName;       // o 'nombre'
+        const direccion = user.perfil.restaurant;    // si aplica
+        const email = user.perfil.direction;            // el campo real de email
         const emailAdmin = "Cipxiaomi55@gmail.com"
         // 4. Valida el email
         if (!email) {

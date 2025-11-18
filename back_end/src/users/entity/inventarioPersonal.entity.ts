@@ -3,8 +3,8 @@ import { Usuario } from './User.entity';
 
 @Entity()
 export class InventarioPersonal {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @Column()
     producto: string;
@@ -21,6 +21,10 @@ export class InventarioPersonal {
     @Column({type: "datetime", nullable: true})
     fechaAnterior: Date;
 
-    @OneToOne(()=> Usuario,usuario => usuario.inventarioPersonal)
+    // ✅ CAMBIO: FK ahora es UUID
+    @Column({ type: 'uuid' })
+    usuarioId: string;
+
+    @OneToOne(() => Usuario, usuario => usuario.inventarioPersonal)
     usuario: Usuario;
 }

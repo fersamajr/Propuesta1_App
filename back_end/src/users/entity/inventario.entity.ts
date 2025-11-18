@@ -15,8 +15,11 @@ export class Inventario {
 
     @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
     updatedAt: Date;
+    // ✅ CAMBIO: FK ahora es UUID
+    @Column({ type: 'uuid' })
+    usuarioId: string;
 
-    @OneToOne(()=> Usuario,usuario => usuario.inventario)
+    @OneToOne(() => Usuario, usuario => usuario.inventario)
     usuario: Usuario;
 }
 

@@ -1,23 +1,29 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne } from 'typeorm';
+// src/predicciones/prediccion.entity.ts
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Usuario } from 'src/users/entity/User.entity';
 import { Pedido } from 'src/pedidos/pedido.entity';
-@Entity()
-export class Prediccion {
-    @PrimaryGeneratedColumn()
-    id: number;
 
-    @ManyToOne(() => Usuario, usuario => usuario.predicciones)
+@Entity('predicciones')
+export class Prediccion {
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
+
+    @Column({ type: 'uuid' })
+    usuarioId: string;
+
+    @ManyToOne(() => Usuario, usuario => usuario.predicciones, { onDelete: 'CASCADE' })
     usuario: Usuario;
 
-    @Column('int')
-    cantidad: number;
+    @Column({ type: 'uuid', nullable: true })
+    pedidoId: string;
 
-    @Column()
-    fecha: Date;
-
-    @Column({default:false})
-    asociadaAPedido: boolean;
-
-    @OneToOne(()=> Pedido,pedido => pedido.prediccion)
+    @OneToOne(() => Pedido, pedido => pedido.prediccion, { onDelete: 'SET NULL' })
+    @JoinColumn({ name: 'pedidoId' })
     pedido: Pedido;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
 }
