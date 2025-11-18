@@ -10,36 +10,47 @@ import { Usuario } from '../entity/User.entity';
 export class InventarioPersonalService {
     constructor(@InjectRepository(InventarioPersonal) private repo: Repository<InventarioPersonal>,
                 @InjectRepository(Usuario) private userRepo: Repository<Usuario>) {}
-
-    async create(userId: string, dto: createInventarioPersonalDto) {
-        const usuario = await this.userRepo.findOne({ where: { id: userId } });
-        if (!usuario) throw new Error("Usuario no existe");
-
-        // 1. Crear y guardar el inventario
-        const nuevoInventario = this.repo.create(dto);
-        await this.repo.save(nuevoInventario);
-
-        // 2. Relacionar usuario y inventario
-        usuario.inventarioPersonal = nuevoInventario;
-        await this.userRepo.save(usuario);
-
-        return nuevoInventario;
-    }
-
-    async update(id: string, dto: updateInventarioPersonalDto) {
-        const encontrado = await this.repo.findOne({ where: { id } });
-        if (!encontrado) throw new HttpException('InventarioPersonal no encontrado', HttpStatus.NOT_FOUND);
-        await this.repo.update(id, dto);
-        return this.repo.findOne({ where: { id } });
-    }
+    
+        async create(userId: string, dto: createInventarioPersonalDto) {
+            const usuario = await this.userRepo.findOne({ where: { id: userId } });
+            if (!usuario) throw new Error("Usuario no existe");
+    
+            // Crear inventario asignando explícitamente usuarioId para evitar error SQL
+            const nuevoInventario = this.repo.create({
+                ...dto,
+                usuarioId: userId,
+            });
+            await this.repo.save(nuevoInventario);
+    
+            // Actualizar la relación en usuario
+            usuario.inventarioPersonal = nuevoInventario;
+            await this.userRepo.save(usuario);
+    
+            return nuevoInventario;
+        }
+        async updateByUsuarioId(usuarioId: string, dto: updateInventarioPersonalDto) {
+        const inventario = await this.repo.findOne({ where: { usuarioId } });
+        if (!inventario) throw new HttpException('InventarioPersonal no encontrado', HttpStatus.NOT_FOUND);
+    
+        // Evitar actualizar usuarioId accidentalmente
+        if ('usuarioId' in dto) {
+            delete dto.usuarioId;
+        }
+    
+        if (!dto || Object.keys(dto).length === 0) {
+            throw new HttpException('No se proporcionaron campos a actualizar', HttpStatus.BAD_REQUEST);
+        }
+    
+        await this.repo.update(inventario.id, dto);
+        return this.repo.findOne({ where: { id: inventario.id } });
+        }
 
     async findAll() {
         return this.repo.find({relations: ["usuario"]}); 
     }
-
-    async findOne(id: string) {
-        const encontrado = await this.repo.findOne({ where: { id }, relations:["usuario"]});
-        if (!encontrado) throw new HttpException('InventarioPersonal no encontrado', HttpStatus.NOT_FOUND);
-        return encontrado;
+    async findByUsuarioId(usuarioId: string) {
+    const inventario = await this.repo.findOne({ where: { usuarioId }, relations: ['usuario'] });
+    if (!inventario) throw new HttpException('InventarioPersonal no encontrado', HttpStatus.NOT_FOUND);
+    return inventario;
     }
 }
