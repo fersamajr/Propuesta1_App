@@ -1,30 +1,35 @@
-import { Entity , PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, OneToMany} from "typeorm";
-import { Usuario } from "./User.entity";
+// src/users/entities/profile.entity.ts
 
-@Entity()
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
+import { Usuario } from './User.entity';
+
+@Entity('perfiles')
 export class Profile {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
-    @Column({unique : true})
-    firstname: string;
+    @Column({ type: 'varchar', length: 100, nullable: true })
+    firstName: string;
 
-    @Column({unique : true})
-    lastname: string;
+    @Column({ type: 'varchar', length: 100, nullable: true })
+    lastName: string;
 
-    @Column({unique : true})
-    restaurante: string;
+    @Column({ type: 'varchar', length: 150, nullable: true })
+    restaurant: string;
 
-    @Column()
-    direccion: string;
+    @Column({ type: 'varchar', length: 255, nullable: true })
+    direction: string;
 
-    @Column('float')
+    @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
     precioAcordado: number;
 
-    @Column({nullable:true})
+    @Column({ type: 'text', nullable: true })
     notas: string;
+
+    // ✅ CAMBIO: FK ahora es UUID
+    @Column({ type: 'uuid' })
+    usuarioId: string;
 
     @OneToOne(() => Usuario, usuario => usuario.perfil)
     usuario: Usuario;
-
 }

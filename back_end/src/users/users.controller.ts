@@ -11,20 +11,20 @@ export class UsersController {
     getAll() { return this.service.findAll(); }
 
     @Get(':id')
-    getById(@Param('id') id: number) { return this.service.getUser(Number(id)); }
+    getById(@Param('id') id: String) { return this.service.getUser(String(id)); }
 
     @Post()
     create(@Body() dto: createUserDto) {
-        return this.service.create(dto);
+        return this.service.createPost(dto);
     }
 
     @Patch(':id')
-    update(@Param('id') id: number, @Body() dto: uptadeUserDto) {
-        return this.service.update(Number(id), dto);
+    update(@Param('id') id: String, @Body() dto: uptadeUserDto) {
+        return this.service.update(String(id), dto);
     }
 
     @Delete(':id')
-    remove(@Param('id') id: number) {
-        return this.service.delete(Number(id));
+    remove(@Param('id') id: String) {
+        return this.service.delete(String(id));
     }
 }
