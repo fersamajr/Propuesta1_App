@@ -18,17 +18,17 @@ export class PrediccionesController {
     }
 
     @Get(':id')
-    findOne(@Param('id') id: number) {
-        return this.prediccionesService.findOne(Number(id));
+    findOne(@Param('id') id: string) {
+        return this.prediccionesService.findOne(String(id));
     }
 
     @Patch(':id')
-    update(@Param('id') id: number, @Body() dto: updatePrediccionDto) {
-        return this.prediccionesService.update(Number(id), dto);
+    update(@Param('id') id: string, @Body() dto: updatePrediccionDto) {
+        return this.prediccionesService.update(String(id), dto);
     }
 
     @Delete(':id')
-    remove(@Param('id') id: number) {
-        return this.prediccionesService.remove(Number(id));
+    remove(@Param('id') id: string) {
+        return this.prediccionesService.remove(String(id));
     }
 }

@@ -21,6 +21,5 @@ export class createSolicitudPedidoDto{
     @IsOptional()
     confirmado?:boolean
 
-    @IsNumber()
-    usuarioId : number
+    usuarioId : string
 }

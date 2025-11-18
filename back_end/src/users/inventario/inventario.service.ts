@@ -12,7 +12,7 @@ export class InventarioService {
     constructor(@InjectRepository(Inventario) private repo: Repository<Inventario>,
                     @InjectRepository(Usuario) private userRepo: Repository<Usuario>) {}
 
-    async create(userId: number, dto: createInventarioDto) {
+    async create(userId: string, dto: createInventarioDto) {
         const usuario = await this.userRepo.findOne({ where: { id: userId } });
         if (!usuario) throw new Error("Usuario no existe");
 
@@ -28,7 +28,7 @@ export class InventarioService {
     }
     
 
-async update(id: number, dto: updateInventarioDto) {
+async update(id: string, dto: updateInventarioDto) {
     const inventario = await this.repo.findOne({ where: { id } });
     if (!inventario) throw new HttpException('Inventario no encontrado', HttpStatus.NOT_FOUND);
 
@@ -46,7 +46,7 @@ async update(id: number, dto: updateInventarioDto) {
         return this.repo.find({relations: ["usuario"]}); 
     }
 
-    async findOne(id: number) {
+    async findOne(id: string) {
         const inventario =  await this.repo.findOne({ where: { id }, relations:["usuario"]});
         if (!inventario) throw new HttpException('Inventario no encontrado', HttpStatus.NOT_FOUND);
         return inventario;

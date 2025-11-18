@@ -18,7 +18,7 @@ export class PrediccionesService {
 
     async create(dto: createPrediccionDto) {
         // Buscar el pedido por ID
-        const pedido = await this.pedidoRepo.findOne({ where: { id: dto.pedidoId } });
+        const pedido = await this.pedidoRepo.findOne({ where: { id: dto.pedidoId} });
         if (!pedido) {
             throw new Error("Pedido no existe");
         }
@@ -51,7 +51,7 @@ export class PrediccionesService {
         return this.prediccionesRepository.find({ relations: ['usuario'] });
     }
 
-    async findOne(id: number) {
+    async findOne(id: string) {
         const prediccion = await this.prediccionesRepository.findOne({
         where: { id },
         relations: ['usuario'],
@@ -62,7 +62,7 @@ export class PrediccionesService {
         return prediccion;
     }
 
-    async update(id: number, dto: updatePrediccionDto) {
+    async update(id: string, dto: updatePrediccionDto) {
         const prediccion = await this.prediccionesRepository.findOneBy({ id });
         if (!prediccion) {
         throw new HttpException('Predicción no encontrada', HttpStatus.NOT_FOUND);
@@ -71,7 +71,7 @@ export class PrediccionesService {
         return this.prediccionesRepository.save(prediccion);
     }
 
-    async remove(id: number) {
+    async remove(id: string) {
         const prediccion = await this.prediccionesRepository.findOneBy({ id });
         if (!prediccion) {
         throw new HttpException('Predicción no encontrada', HttpStatus.NOT_FOUND);

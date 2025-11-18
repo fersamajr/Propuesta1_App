@@ -33,7 +33,7 @@ export class UsersService {
         return usuario;
     }
 
-    async delete(id: String) {
+    async delete(id: string) {
         const result = await this.repo.delete(id);
         if (result.affected === 0) {
         throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);

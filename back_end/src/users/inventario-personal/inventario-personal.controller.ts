@@ -13,17 +13,17 @@ export class InventarioPersonalController {
     }
 
     @Get(':id')
-    getById(@Param('id') id: number) {
-        return this.service.findOne(Number(id));
+    getById(@Param('id') id: string) {
+        return this.service.findOne(String(id));
     }
 
     @Post(':id')
-    create(@Param('id') id: number, @Body() dto: createInventarioPersonalDto) {
-        return this.service.create(Number(id), dto);
+    create(@Param('id') id: string, @Body() dto: createInventarioPersonalDto) {
+        return this.service.create(String(id), dto);
     }
 
     @Patch(':id')
-    update(@Param('id') id: number, @Body() dto: updateInventarioPersonalDto) {
-        return this.service.update(Number(id), dto);
+    update(@Param('id') id: string, @Body() dto: updateInventarioPersonalDto) {
+        return this.service.update(String(id), dto);
     }
 }

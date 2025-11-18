@@ -29,7 +29,7 @@ export class SolicitudPedidosService {
         return this.solicitudesRepo.find({ relations: ['usuario',"pedido"] });
     }
 
-    async findOne(id: number) {
+    async findOne(id: string) {
         const solicitud = await this.solicitudesRepo.findOne({
         where: { id },
         relations: ['usuario',"Pedido"],
@@ -40,7 +40,7 @@ export class SolicitudPedidosService {
         return solicitud;
     }
 
-    async update(id: number, dto: updateSolicitudPedidoDto) {
+    async update(id: string, dto: updateSolicitudPedidoDto) {
         const solicitud = await this.solicitudesRepo.findOneBy({ id });
         if (!solicitud) {
         throw new HttpException('Solicitud-Pedido no encontrada', HttpStatus.NOT_FOUND);
@@ -49,7 +49,7 @@ export class SolicitudPedidosService {
         return this.solicitudesRepo.save(solicitud);
     }
 
-    async remove(id: number) {
+    async remove(id: string) {
         const solicitud = await this.solicitudesRepo.findOneBy({ id });
         if (!solicitud) {
         throw new HttpException('Solicitud-Pedido no encontrada', HttpStatus.NOT_FOUND);

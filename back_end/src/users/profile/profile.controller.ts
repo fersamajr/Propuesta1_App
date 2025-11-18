@@ -11,15 +11,15 @@ export class ProfileController {
     getAll() { return this.service.findAll(); }
 
     @Get(':id')
-    getById(@Param('id') id: number) { return this.service.findOne(Number(id)); }
+    getById(@Param('id') id: string) { return this.service.findOne(String(id)); }
 
     @Post(':id')
-    create(@Param('id') id: number, @Body() dto: createProfileDto) {
-        return this.service.create(Number(id), dto);
+    create(@Param('id') id: string, @Body() dto: createProfileDto) {
+        return this.service.create(String(id), dto);
     }
 
     @Patch(':id')
-    update(@Param('id') id: number, @Body() dto: updateProfileDto) {
-        return this.service.update(Number(id), dto);
+    update(@Param('id') id: string, @Body() dto: updateProfileDto) {
+        return this.service.update(String(id), dto);
     }
 }

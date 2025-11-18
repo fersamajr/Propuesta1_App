@@ -4,8 +4,8 @@ import { Usuario } from "./User.entity";
 
 @Entity()
 export class Inventario {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @Column('float')
     cantidad: number;
