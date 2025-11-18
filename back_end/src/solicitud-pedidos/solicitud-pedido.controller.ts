@@ -19,7 +19,7 @@ export class SolicitudPedidosController {
         const solicitud = await this.solicitudesService.create(dto);
 
         // 2. Busca el usuario y su perfil
-        const user = await this.usersService.getUser(Number(dto.usuarioId)); // Usa el método con relaciones
+        const user = await this.usersService.getUser(String(dto.usuarioId)); // Usa el método con relaciones
 
         // 3. Extrae los datos del perfil (ajusta el nombre de las propiedades)
         const nombre = user.perfil.firstName;       // o 'nombre'
@@ -69,17 +69,17 @@ export class SolicitudPedidosController {
     }
 
     @Get(':id')
-    findOne(@Param('id') id: number) {
-        return this.solicitudesService.findOne(Number(id));
+    findOne(@Param('id') id: string) {
+        return this.solicitudesService.findOne(String(id));
     }
 
     @Patch(':id')
-    update(@Param('id') id: number, @Body() dto: updateSolicitudPedidoDto) {
-        return this.solicitudesService.update(Number(id), dto);
+    update(@Param('id') id: string, @Body() dto: updateSolicitudPedidoDto) {
+        return this.solicitudesService.update(String(id), dto);
     }
 
     @Delete(':id')
-    remove(@Param('id') id: number) {
-        return this.solicitudesService.remove(Number(id));
+    remove(@Param('id') id: string) {
+        return this.solicitudesService.remove(String(id));
     }
 }

@@ -8,9 +8,9 @@ export class updatePrediccionDto{
     @IsOptional()
     fecha: Date;
 
-    @IsNumber()
+
     @IsOptional()
-    pedidoId: number
+    pedidoId: string
 
     @IsOptional()
     asociadaAPedido: boolean

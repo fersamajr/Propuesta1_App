@@ -14,7 +14,6 @@ export class updatePedidoDto{
     @IsOptional()
     notas?: string
 
-    @IsNumber()
     @IsOptional()
-    solicitudId? : number
+    solicitudId? : string
 }

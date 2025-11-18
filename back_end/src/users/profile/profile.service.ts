@@ -11,7 +11,7 @@ export class ProfileService {
     constructor(@InjectRepository(Profile) private repo: Repository<Profile>,
                 @InjectRepository(Usuario) private userRepo: Repository<Usuario>) {}
 
-    async create(userId: number, dto: createProfileDto) {
+    async create(userId: string, dto: createProfileDto) {
         const usuario = await this.userRepo.findOne({ where: { id: userId } });
         if (!usuario) throw new Error("Usuario no existe");
 
@@ -27,7 +27,7 @@ export class ProfileService {
     }
 
 
-    async update(id: number, dto: updateProfileDto) {
+    async update(id: string, dto: updateProfileDto) {
         const perfil = await this.repo.findOne({ where: { id } });
         if (!perfil) throw new HttpException('Profile no encontrada', HttpStatus.NOT_FOUND);
         await this.repo.update(id, dto);
@@ -38,7 +38,7 @@ export class ProfileService {
         return this.repo.find({relations: ["usuario"]}); 
     }
 
-    async findOne(id: number) {
+    async findOne(id: string) {
         const perfil = await this.repo.findOne({ where: { id }, relations:["usuario"]});
         if (!perfil) throw new HttpException('Profile no encontrada', HttpStatus.NOT_FOUND);
         return perfil;

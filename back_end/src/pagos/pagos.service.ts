@@ -29,7 +29,7 @@ export class PagosService {
         return this.pagosRepository.find({ relations: ['usuario'] });
     }
 
-    async findOne(id: number) {
+    async findOne(id: string) {
         const pago = await this.pagosRepository.findOne({
         where: { id },
         relations: ['usuario'],
@@ -40,7 +40,7 @@ export class PagosService {
         return pago;
     }
 
-    async update(id: number, dto: updatePagoDto) {
+    async update(id: string, dto: updatePagoDto) {
         const pago = await this.pagosRepository.findOneBy({ id });
         if (!pago) {
         throw new HttpException('Pago no encontrado', HttpStatus.NOT_FOUND);
@@ -49,7 +49,7 @@ export class PagosService {
         return this.pagosRepository.save(pago);
     }
 
-    async remove(id: number) {
+    async remove(id: string) {
         const pago = await this.pagosRepository.findOneBy({ id });
         if (!pago) {
         throw new HttpException('Pago no encontrado', HttpStatus.NOT_FOUND);

@@ -61,7 +61,7 @@ export class PedidosService {
         return this.pedidosRepository.find({relations:["usuario","prediccion","solicitudPedido"]});
     }
 
-    async findOne(id: number) {
+    async findOne(id: string) {
         const pedido = await this.pedidosRepository.findOne({
         where: { id },
         relations: ["usuario","prediccion","solicitudPedido"],
@@ -72,7 +72,7 @@ export class PedidosService {
         return pedido;
     }
 
-    async update(id: number, dto: updatePedidoDto) {
+    async update(id: string, dto: updatePedidoDto) {
         const pedido = await this.pedidosRepository.findOneBy({ id });
         if (!pedido) {
         throw new HttpException("Pedido not found", HttpStatus.NOT_FOUND);
@@ -81,7 +81,7 @@ export class PedidosService {
         return this.pedidosRepository.save(pedido);
     }
 
-    async remove(id: number) {
+    async remove(id: string) {
     const pedido = await this.pedidosRepository.findOne({
         where: { id },
         relations: ['solicitudPedido']

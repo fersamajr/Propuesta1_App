@@ -1,10 +1,10 @@
 import { Entity , PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, OneToMany, ManyToOne, CreateDateColumn, UpdateDateColumn} from "typeorm";
 import { Usuario } from "src/users/entity/User.entity";
 
-@Entity()
+@Entity('pagos')
 export class Pago {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn('uuid')   // Cambiado a UUID
+    id: string;
 
     @Column('float')
     cantidad: number;
@@ -24,5 +24,3 @@ export class Pago {
     @UpdateDateColumn()
     updatedAt: Date;
 }
-
-

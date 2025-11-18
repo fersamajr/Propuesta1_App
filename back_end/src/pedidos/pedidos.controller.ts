@@ -18,12 +18,12 @@ export class PedidosController {
     const pedido = await this.pedidosService.createPedido(dto);
 
     // Consulta al usuario con perfil ya incluido
-    const user = await this.usersService.getUser(Number(dto.usuarioId));
+    const user = await this.usersService.getUser(String(dto.usuarioId));
 
     // Obtén los datos del perfil
-    const nombre = user.perfil.firstname;        // o 'nombre', según tu campo real
-    const direccion = user.perfil.restaurante;     // o cualquier otro campo
-    const email = user.perfil.direccion;             // campo de email real
+    const nombre = user.perfil.firstName;        // o 'nombre', según tu campo real
+    const direccion = user.perfil.restaurant;     // o cualquier otro campo
+    const email = user.perfil.direction;             // campo de email real
 
     // Cuerpo del mensaje
     const bodyMsg = `Hola ${nombre}, tu pedido fue registrado y se entregará a ${direccion}.`;
@@ -46,17 +46,17 @@ export class PedidosController {
     }
 
     @Get(':id')
-    getPedido(@Param('id') id: number) {
-        return this.pedidosService.findOne(Number(id));
+    getPedido(@Param('id') id: string) {
+        return this.pedidosService.findOne(String(id));
     }
 
     @Patch(':id')
-    updatePedido(@Param('id') id: number, @Body() dto: updatePedidoDto) {
-        return this.pedidosService.update(Number(id), dto);
+    updatePedido(@Param('id') id: string, @Body() dto: updatePedidoDto) {
+        return this.pedidosService.update(String(id), dto);
     }
 
     @Delete(':id')
-    removePedido(@Param('id') id: number) {
-        return this.pedidosService.remove(Number(id));
+    removePedido(@Param('id') id: string) {
+        return this.pedidosService.remove(String(id));
     }
 }
