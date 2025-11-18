@@ -57,4 +57,11 @@ export class PagosService {
         await this.pagosRepository.delete(id);
         return { deleted: true, id };
     }
+    // 🆕 NUEVO MÉTODO: Encontrar pagos por ID de usuario
+    async findByUsuarioId(usuarioId: string) {
+        return this.pagosRepository.find({ 
+            where: { usuarioId }, 
+            relations: ['usuario'] 
+        });
+    }
 }

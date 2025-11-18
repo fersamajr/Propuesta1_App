@@ -46,6 +46,14 @@ export class PrediccionesService {
         return prediccionGuardada;
     }
 
+    // 🆕 NUEVO MÉTODO: Encontrar predicciones por ID de usuario
+    async findByUsuarioId(usuarioId: string) {
+        return this.prediccionesRepository.find({
+            where: { usuarioId },
+            relations: ['usuario'],
+            order: { createdAt: 'DESC' }
+        });
+    }
 
     findAll() {
         return this.prediccionesRepository.find({ relations: ['usuario'] });
