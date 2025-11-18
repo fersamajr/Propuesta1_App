@@ -1,8 +1,10 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Request, UseGuards } from '@nestjs/common';
 import { createInventarioPersonalDto } from '../dto/createInventarioPersonal.dto';
 import { updateInventarioPersonalDto } from '../dto/updateInventarioPersonal.dto';
 import { InventarioPersonalService } from './inventario-personal.service';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('inventario-personal')
 export class InventarioPersonalController {
     constructor(private readonly service: InventarioPersonalService) {}
@@ -12,18 +14,18 @@ export class InventarioPersonalController {
         return this.service.findAll();
     }
 
-    @Get(':id')
-    getById(@Param('id') id: string) {
-        return this.service.findOne(String(id));
+    @Get('me')
+    getMyInventario(@Request() req) {
+        return this.service.findByUsuarioId(req.user.userId);
     }
 
-    @Post(':id')
-    create(@Param('id') id: string, @Body() dto: createInventarioPersonalDto) {
-        return this.service.create(String(id), dto);
+    @Post('me')
+    createInventario(@Body() dto: createInventarioPersonalDto, @Request() req) {
+        return this.service.create(req.user.userId, dto);
     }
 
-    @Patch(':id')
-    update(@Param('id') id: string, @Body() dto: updateInventarioPersonalDto) {
-        return this.service.update(String(id), dto);
+    @Patch('me')
+    updateInventario(@Body() dto: updateInventarioPersonalDto, @Request() req) {
+        return this.service.updateByUsuarioId(req.user.userId, dto);
     }
 }
