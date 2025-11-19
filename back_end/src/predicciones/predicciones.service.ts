@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, IsNull } from 'typeorm'; // ⬅️ 1. IMPORTAR IsNull
 import { Prediccion } from './prediccion.entity';
 import { createPrediccionDto } from './dto/createPrediccion.dto';
 import { updatePrediccionDto } from './dto/updatePrediccion.dto';
@@ -49,7 +49,10 @@ export class PrediccionesService {
     // 🆕 NUEVO MÉTODO: Encontrar predicciones por ID de usuario
     async findByUsuarioId(usuarioId: string) {
         return this.prediccionesRepository.find({
-            where: { usuarioId },
+            where: { 
+                usuarioId: usuarioId,
+                pedidoId: IsNull() // ⬅️ 2. FILTRO CLAVE: Solo las que NO tienen pedido asociado
+            },
             relations: ['usuario'],
             order: { createdAt: 'DESC' }
         });

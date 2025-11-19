@@ -23,7 +23,7 @@ export class PagosController {
         return this.pagosService.findAll();
     }
 
-    @Get(':id')
+    @Get('byid/:id')
     getPago(@Param('id') id: string) {
         return this.pagosService.findOne(String(id));
     }
@@ -36,5 +36,10 @@ export class PagosController {
     @Delete(':id')
     removePago(@Param('id') id: string) {
         return this.pagosService.remove(String(id));
+    }
+    @Get('resumen')
+    async getResumen(@Request() req) {
+        const userId = req.user.userId;
+        return this.pagosService.getResumenFinanciero(userId);
     }
 }

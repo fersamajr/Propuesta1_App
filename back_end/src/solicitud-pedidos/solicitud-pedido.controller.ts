@@ -33,7 +33,7 @@ export class SolicitudPedidosController {
         // 4. Extrae los datos del perfil (la lógica del email se mantiene)
         const nombre = user.perfil.firstName;
         const direccion = user.perfil.restaurant;
-        const email = user.perfil.direction; // Campo que se usa como email
+        const email = user.email; // Campo que se usa como email
         const emailAdmin = "Cipxiaomi55@gmail.com"
         
         // 5. Valida el email
@@ -52,7 +52,7 @@ export class SolicitudPedidosController {
         const MsgAdmin = 
         `Solicitud de pedido creada favor de confirmarla para ${direccion}.
         Descripcion del pedido
-        User:  ${userId}
+        User:  ${nombre}
         Cantidad Grano: ${dto.grano}
         Cantidad Molido: ${dto.molido}
         Fecha de entrega: ${dto.fechaEntrega}

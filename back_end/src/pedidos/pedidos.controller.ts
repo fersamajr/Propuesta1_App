@@ -24,7 +24,7 @@ export class PedidosController {
     // Obtén los datos del perfil
     const nombre = user.perfil.firstName;        // o 'nombre', según tu campo real
     const direccion = user.perfil.restaurant;     // o cualquier otro campo
-    const email = user.perfil.direction;             // campo de email real
+    const email = user.email;             // campo de email real
 
     // Cuerpo del mensaje
     const bodyMsg = `Hola ${nombre}, tu pedido fue registrado y se entregará a ${direccion}.`;
@@ -64,5 +64,10 @@ export class PedidosController {
     @Delete(':id')
     removePedido(@Param('id') id: string) {
         return this.pedidosService.remove(String(id));
+    }
+    @Get('analytics/me')
+    async getMyAnalytics(@Request() req) {
+        const userId = req.user.userId;
+        return this.pedidosService.getAnalytics(userId);
     }
 }
