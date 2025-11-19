@@ -2,9 +2,9 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, Request }
 import { createPrediccionDto } from './dto/createPrediccion.dto';
 import { updatePrediccionDto } from './dto/updatePrediccion.dto';
 import { PrediccionesService } from './predicciones.service';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'; 
 
-@UseGuards(JwtAuthGuard) // ⬅️ Proteger la ruta
+@UseGuards(JwtAuthGuard)
 @Controller('predicciones')
 export class PrediccionesController {
     constructor(private readonly prediccionesService: PrediccionesService) {}
@@ -14,15 +14,28 @@ export class PrediccionesController {
         return this.prediccionesService.create(dto);
     }
 
+    // 🆕 ESTA RUTA DEBE IR PRIMERO (Antes de :id)
+    @Get('analisis-desviacion')
+    getDesviaciones() {
+        return this.prediccionesService.getAnalisisDesviacion();
+    }
+
+    @Get('me')
+    getMyPredicciones(@Request() req) {
+        const userId = req.user.userId;
+        return this.prediccionesService.findByUsuarioId(userId);
+    }
+
     @Get()
     findAll() {
         return this.prediccionesService.findAll();
     }
-    @Get('me') // ⬅️ Nueva ruta para obtener mis predicciones
-    getMyPredicciones(@Request() req) {
-        const userId = req.user.userId; // Extraer el userId del token
-        return this.prediccionesService.findByUsuarioId(userId); // Llamar al nuevo método del servicio
+    @Get('planeador-inventario')
+    getPlaneador() {
+        return this.prediccionesService.getInventoryPlanning();
     }
+    // ⚠️ ESTA RUTA DEBE IR AL FINAL DE LOS GETs
+    // Porque captura cualquier cosa (ej: "123", "abc") como un ID.
     @Get(':id')
     findOne(@Param('id') id: string) {
         return this.prediccionesService.findOne(String(id));

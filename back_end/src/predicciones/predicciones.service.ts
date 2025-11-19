@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, IsNull } from 'typeorm'; // ⬅️ 1. IMPORTAR IsNull
+import { Repository, IsNull, Not } from 'typeorm'; // ⬅️ 1. IMPORTAR IsNull
 import { Prediccion } from './prediccion.entity';
 import { createPrediccionDto } from './dto/createPrediccion.dto';
 import { updatePrediccionDto } from './dto/updatePrediccion.dto';
@@ -89,5 +89,40 @@ export class PrediccionesService {
         }
         await this.prediccionesRepository.delete(id);
         return { deleted: true, id };
+    }
+    // 🆕 MÉTODO PARA ANÁLISIS DE DESVIACIÓN
+    async getAnalisisDesviacion() {
+        return this.prediccionesRepository.find({
+            where: { 
+                pedidoId: Not(IsNull()) // Solo las que ya se convirtieron en pedido
+            },
+            relations: [
+                'usuario', 
+                'usuario.perfil', // Para ver el nombre del restaurante
+                'pedido', 
+                'pedido.solicitudPedido' // Para ver cuánto pidieron realmente
+            ],
+            order: { fecha: 'DESC' }
+        });
+    }
+    async getInventoryPlanning() {
+        // 1. Buscar todas las predicciones que NO se han convertido en pedido
+        const pendientes = await this.prediccionesRepository.find({
+            where: { 
+                pedidoId: IsNull() // Solo las pendientes
+            },
+            relations: ['usuario', 'usuario.perfil'], // Útil para ver quién lo necesitará (opcional en la vista)
+            order: { fecha: 'ASC' }
+        });
+
+        // 2. Calcular Total Global
+        const totalKgNecesarios = pendientes.reduce((acc, p) => acc + p.cantidad, 0);
+
+        // 3. Agrupar por Semana/Mes para la gráfica (Lógica simple por Fecha exacta)
+        // El frontend puede agrupar mejor, enviamos la lista limpia.
+        return {
+            totalKg: totalKgNecesarios,
+            detalle: pendientes // Lista para graficar la demanda en el tiempo
+        };
     }
 }

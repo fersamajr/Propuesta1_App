@@ -158,4 +158,26 @@ function AnalisisNegocio() {
                                                 cx="50%" 
                                                 cy="50%" 
                                                 innerRadius={80} // Radio interno más grande para estilo "Donut"
-                                    
+                                                outerRadius={110} 
+                                                paddingAngle={5}
+                                                dataKey="value"
+                                            >
+                                                {pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+                                            </Pie>
+                                            <Tooltip />
+                                            <Legend verticalAlign="bottom" height={36}/>
+                                        </PieChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            </div>
+                        </>
+                    )}
+                </div>
+                
+                <div style={{ width: 150 }}></div>
+            </div>
+        </div>
+    );
+}
+
+export default AnalisisNegocio;
