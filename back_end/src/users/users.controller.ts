@@ -2,10 +2,11 @@ import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/commo
 import { createUserDto } from './dto/createUser.dto';
 import { uptadeUserDto } from './dto/updateUser.dto';
 import { UsersService } from './users.service';
+import { MailService } from 'src/mail/mail.service';
 
 @Controller('users')
 export class UsersController {
-    constructor(private readonly service: UsersService) {}
+    constructor(private readonly service: UsersService, private mailService: MailService) {}
 
     @Get()
     getAll() { return this.service.findAll(); }
@@ -26,5 +27,22 @@ export class UsersController {
     @Delete(':id')
     remove(@Param('id') id: string) {
         return this.service.delete(String(id));
+    }
+    // 🆕 ENDPOINT PARA BROADCAST
+    @Post('admin/broadcast')
+    async sendBroadcast(@Body() body: { asunto: string; mensaje: string }) {
+        const usuarios = await this.service.findAll();
+        // Filtrar solo clientes activos
+        const clientes = usuarios.filter(u => u.rol === 'Cliente' && u.isActive);
+        
+        let enviados = 0;
+        for (const cliente of clientes) {
+            if (cliente.email) {
+                // Enviar correo (puedes hacerlo asíncrono sin await para no bloquear, o con await para asegurar)
+                this.mailService.sendMail(cliente.email, `📢 ${body.asunto}`, body.mensaje);
+                enviados++;
+            }
+        }
+        return { message: `Mensaje enviado a ${enviados} clientes.` };
     }
 }

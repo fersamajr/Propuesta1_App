@@ -42,4 +42,8 @@ export class PagosController {
         const userId = req.user.userId;
         return this.pagosService.getResumenFinanciero(userId);
     }
+    @Get('saldos-globales')
+    async getSaldosGlobales() {
+        return this.pagosService.getBalancesGlobales();
+    }
 }

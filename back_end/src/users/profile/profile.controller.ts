@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, Post, UseGuards, Request } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, UseGuards, Request, Param } from '@nestjs/common';
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard'; // Ajusta el path si es necesario
 import { createProfileDto } from '../dto/createProfile.dto';
 import { updateProfileDto } from '../dto/updateProfile.dto';
@@ -28,5 +28,9 @@ export class ProfileController {
     updateProfile(@Body() dto: updateProfileDto, @Request() req) {
         return this.service.updateByUsuarioId(req.user.userId, dto);
     }
+    // 🆕 NUEVO: Ruta para que el Admin edite perfiles por ID de usuario
+    @Patch('admin/:userId')
+    updateByAdmin(@Param('userId') userId: string, @Body() dto: updateProfileDto) {
+        return this.service.updateByUsuarioId(userId, dto);
+    }
 }
-

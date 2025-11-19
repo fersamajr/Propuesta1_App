@@ -1,7 +1,6 @@
-// src/app.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';  // <-- Importar ConfigModule explícitamente
+import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { PagosModule } from './pagos/pagos.module';
 import { PedidosModule } from './pedidos/pedidos.module';
@@ -11,10 +10,14 @@ import { LogsModule } from './logs/logs.module';
 import { MailService } from './mail/mail.service';
 import { AuthModule } from './auth/auth.module';
 
+// 👇 AGREGA ESTAS DOS IMPORTACIONES 👇
+import { AppController } from './app.controller'; // ⬅️ Faltaba esto
+import { AppService } from './app.service';       // ⬅️ Faltaba esto
+
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,  // Para que esté disponible en toda la app
+      isGlobal: true,
     }),
     UsersModule,
     PagosModule,
@@ -34,6 +37,10 @@ import { AuthModule } from './auth/auth.module';
     }),
     AuthModule,
   ],
-  providers: [MailService],
+  // 👇 REGISTRA EL CONTROLADOR AQUÍ 👇
+  controllers: [AppController], // ⬅️ ¡ESTO ES LO QUE HACE QUE FUNCIONE LA RUTA!
+  
+  // 👇 REGISTRA EL SERVICIO AQUÍ 👇
+  providers: [AppService, MailService], // ⬅️ Agrega AppService junto a MailService
 })
 export class AppModule {}

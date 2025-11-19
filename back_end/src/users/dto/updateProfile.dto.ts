@@ -1,30 +1,31 @@
+// src/users/dto/updateProfile.dto.ts
 import { IsIn, IsNotEmpty, IsNumber, IsOptional, IsString, Min, MinLength } from 'class-validator';
 
-export class updateProfileDto{
+export class updateProfileDto {
     @IsString()
     @MinLength(3)
     @IsOptional()
-    firstname? : string
+    firstName?: string; // ⬅️ CAMBIO: firstname -> firstName
 
     @IsString()
     @MinLength(3)
     @IsOptional()
-    lastname? : string
+    lastName?: string;  // ⬅️ CAMBIO: lastname -> lastName
 
     @IsString()
     @MinLength(3)
     @IsOptional()
-    restaurante?: string
+    restaurant?: string; // ⬅️ CAMBIO: restaurante -> restaurant (inglés, como la entidad)
 
     @IsString()
     @MinLength(3)
     @IsOptional()
-    direccion?: string
+    direction?: string;  // ⬅️ CAMBIO: direccion -> direction (inglés, como la entidad)
 
     @IsNumber()
     @IsOptional()
-    precioAcordado?: number
+    precioAcordado?: number;
 
     @IsOptional()
-    notas?: string
+    notas?: string;
 }

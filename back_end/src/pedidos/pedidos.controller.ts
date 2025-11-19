@@ -12,7 +12,11 @@ export class PedidosController {
                 private readonly mailService: MailService,
                 private usersService: UsersService
     ) {}
-
+    // 🆕 ENDPOINT PARA DASHBOARD ADMIN
+    @Get('admin/global-stats')
+    async getGlobalStats() {
+        return this.pedidosService.getGlobalDashboardStats();
+    }
     // en tu controller
     @Post()
     async createPedido(@Body() dto: createPedidoDto) {
@@ -70,4 +74,5 @@ export class PedidosController {
         const userId = req.user.userId;
         return this.pedidosService.getAnalytics(userId);
     }
+
 }

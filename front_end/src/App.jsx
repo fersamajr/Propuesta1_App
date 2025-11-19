@@ -14,6 +14,17 @@ import Pagos from './pages/Pagos';
 import Predicciones from './pages/Predicciones';
 import Inventario from './pages/Inventario';
 import AnalisisNegocio from './pages/AnalisisNegocio';
+import AdminPedidos from './pages/admin/AdminPedidos';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminSolicitudes from './pages/admin/AdminSolicitudes';
+import AdminClientes from './pages/admin/AdminClientes';
+import AdminPagos from './pages/admin/AdminPagos';
+import AdminSaldos from './pages/admin/AdminSaldos';
+import AdminPredicciones from './pages/admin/AdminPredicciones';
+import AdminDesviaciones from './pages/admin/AdminDesviaciones';
+import AdminInventario from './pages/admin/AdminInventario';
+import AdminPlaneador from './pages/admin/AdminPlaneador';
+import AdminBroadcast from './pages/admin/AdminBroadcast';
 
 // -------------------------------------------------------------
 // 🆕 1. COMPONENTE DE REDIRECCIÓN CONDICIONAL (AuthRedirect)
@@ -89,6 +100,17 @@ function App() {
                     <Route path='/inventario' element={<Inventario />}/> {/* ⬅️ Nueva Ruta */}
                     <Route path='/pagos' element={<Pagos />}/> {/* ⬅️ Nueva ruta */} 
                     <Route path='/analisis-negocio' element={<AnalisisNegocio />}/>
+                    <Route path='/admin' element={<AdminDashboard />} />
+                    <Route path='/admin/pedidos' element={<AdminPedidos />} />
+                    <Route path='/admin/solicitudes' element={<AdminSolicitudes />} /> {/* ⬅️ Nueva Ruta */}
+                    <Route path='/admin/clientes' element={<AdminClientes />} /> {/* ⬅️ Nueva Ruta */}
+                    <Route path='/admin/pagos' element={<AdminPagos />} /> {/* ⬅️ Nueva Ruta */}
+                    <Route path='/admin/saldos' element={<AdminSaldos />} />
+                    <Route path='/admin/predicciones' element={<AdminPredicciones />} />
+                    <Route path='/admin/desviaciones' element={<AdminDesviaciones />} />
+                    <Route path='/admin/inventario' element={<AdminInventario />} />
+                    <Route path='/admin/planeador' element={<AdminPlaneador />} />
+                    <Route path='/admin/broadcast' element={<AdminBroadcast />} />
                 </Routes>
             </AuthRedirect>
         </Router>

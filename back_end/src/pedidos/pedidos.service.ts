@@ -209,4 +209,73 @@ async getAnalytics(usuarioId: string) {
             proyeccion: proyeccionGrafica // ⬅️ Datos para la nueva gráfica
         };
     }
+// 🆕 MÉTODO PARA EL DASHBOARD GLOBAL (KPIs + GRÁFICA)
+    async getGlobalDashboardStats() {
+        const hoy = new Date();
+        const primerDiaMes = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+
+        // 1. KPIs
+        // A. Pedidos Pendientes
+        const totalPendientes = await this.pedidosRepository.count({ where: { entregado: false } });
+
+        // B. Ingresos del Mes (Consultamos Pedidos pagados o podrías consultar la tabla Pagos)
+        // Para simplificar, contaremos pedidos marcados como 'pagado' creados este mes
+        const pedidosDelMes = await this.pedidosRepository.find({
+            where: { 
+                createdAt: Between(primerDiaMes, hoy),
+            },
+            relations: ['solicitudPedido']
+        });
+        
+        // C. Inventario Crítico (Necesitamos inyectar InventarioService o hacerlo directo si tenemos acceso)
+        // Nota: Como estamos en PedidosService, haremos una consulta básica a usuarios para no crear dependencia circular compleja
+        const usuariosConStockBajo = await this.usersService.findAll(); 
+        const alertasStock = usuariosConStockBajo.filter(u => u.inventario && u.inventario.cantidad < 10).length;
+
+        // 2. DATOS PARA GRÁFICA (Ventas últimos 6 meses)
+        const seisMesesAtras = new Date();
+        seisMesesAtras.setMonth(hoy.getMonth() - 5);
+        seisMesesAtras.setDate(1);
+
+        const historialPedidos = await this.pedidosRepository.find({
+            where: { createdAt: Between(seisMesesAtras, hoy) },
+            relations: ['solicitudPedido'],
+            order: { createdAt: 'ASC' }
+        });
+
+        const graficaMap = {};
+        const meses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+
+        // Inicializar mapa
+        for (let i = 0; i < 6; i++) {
+            const d = new Date();
+            d.setMonth(hoy.getMonth() - i);
+            const key = meses[d.getMonth()];
+            graficaMap[key] = 0;
+        }
+
+        historialPedidos.forEach(p => {
+            if (p.solicitudPedido) {
+                const mes = meses[new Date(p.createdAt).getMonth()];
+                const kg = (p.solicitudPedido.grano || 0) + (p.solicitudPedido.molido || 0);
+                if (graficaMap[mes] !== undefined) {
+                    graficaMap[mes] += kg;
+                }
+            }
+        });
+
+        const chartData = Object.keys(graficaMap).reverse().map(mes => ({
+            name: mes,
+            kg: graficaMap[mes]
+        }));
+
+        return {
+            kpis: {
+                pendientes: totalPendientes,
+                pedidosMes: pedidosDelMes.length, // O sumar dinero si tienes precios
+                alertasStock
+            },
+            chartData
+        };
+    }
 }
