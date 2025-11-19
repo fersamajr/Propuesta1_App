@@ -8,11 +8,8 @@ export class createPrediccionDto{
     @IsNotEmpty()
     fecha: Date;
 
-    @IsNotEmpty()
-    pedidoId: string
-
     @IsOptional()
-    asociadaAPedido: boolean
+    pedidoId: string
 
     usuarioId : string
 }

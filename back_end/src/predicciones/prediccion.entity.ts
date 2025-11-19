@@ -21,6 +21,11 @@ export class Prediccion {
     @JoinColumn({ name: 'pedidoId' })
     pedido: Pedido;
 
+    @Column()
+    fecha: Date;
+    @Column()
+    cantidad: number
+    
     @CreateDateColumn()
     createdAt: Date;
 
