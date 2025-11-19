@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api/api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import logoCafe from '../assets/logo-cafe-tech.png';
 
 function Inventario() {
     const navigate = useNavigate();
     const [cantidadActual, setCantidadActual] = useState(0);
     const [ultimaCantidad, setUltimaCantidad] = useState(0);
     
-    // Inputs del formulario
     const [inputMolido, setInputMolido] = useState('');
     const [inputGrano, setInputGrano] = useState('');
     
@@ -30,14 +30,12 @@ function Inventario() {
                 const response = await api.get('/inventario/me', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-                // Si existe inventario, seteamos los valores. Si es null, es 0.
                 if (response.data) {
                     setCantidadActual(response.data.cantidad || 0);
                     setUltimaCantidad(response.data.ultimaCantidad || 0);
                 }
             } catch (error) {
                 console.error("Error cargando inventario", error);
-                // Si da 404 es que aún no tiene registro, no es grave, se queda en 0
             } finally {
                 setLoading(false);
             }
@@ -49,36 +47,28 @@ function Inventario() {
     const handleUpdate = async () => {
         const token = localStorage.getItem('token');
         
-        // Sumamos lo que el usuario ingresó (convertimos a float, si está vacío es 0)
         const nuevoMolido = parseFloat(inputMolido) || 0;
         const nuevoGrano = parseFloat(inputGrano) || 0;
         const nuevoTotal = nuevoMolido + nuevoGrano;
 
         if (nuevoTotal <= 0) {
             setMessage('⚠️ Por favor ingresa una cantidad válida.');
+            setTimeout(() => setMessage(''), 3000);
             return;
         }
 
         try {
-            // Enviamos el nuevo total y guardamos el actual como "ultimaCantidad"
             const payload = {
                 cantidad: nuevoTotal,
-                ultimaCantidad: cantidadActual // Movemos el actual al historial
+                ultimaCantidad: cantidadActual
             };
 
-            // Intentamos crear primero (por si no existe), si falla intentamos actualizar
-            // Ojo: Tu backend tiene POST y PATCH. 
-            // Una estrategia segura es intentar PATCH, y si da 404, hacer POST.
-            // Para simplificar usaremos PATCH asumiendo que el usuario se crea con inventario o usaremos una lógica mixta.
-            
             let response;
             try {
-                // Intentamos actualizar
                 response = await api.patch('/inventario/me', payload, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
             } catch (err) {
-                // Si falla (ej. 404), intentamos crear
                 response = await api.post('/inventario/me', payload, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
@@ -90,111 +80,132 @@ function Inventario() {
             setInputMolido('');
             setInputGrano('');
             
-            // Borrar mensaje después de 3 seg
             setTimeout(() => setMessage(''), 3000);
 
         } catch (error) {
             console.error(error);
             setMessage('❌ Error al actualizar inventario.');
+            setTimeout(() => setMessage(''), 3000);
         }
     };
 
-    // Estilos
-    const topBtnStyle = { background: '#a78Bfa', color: '#222', padding: '10px 30px', borderRadius: 8, border: 'none', cursor: 'pointer' };
-    const menuBtnStyle = { width: '90%', margin: '8px auto', background: '#a78Bfa', color: '#222', padding: '10px', borderRadius: 8, border: 'none', fontSize: 15, display: 'block', cursor: 'pointer' };
+    // --- Estilos ---
+    const PAGE_CONTAINER = { minHeight: '100vh', background: '#f8fafc', display: 'flex', flexDirection: 'column', alignItems: 'center' };
+    const topBtnStyle = { background: '#a78Bfa', color: '#fff', padding: '10px 20px', borderRadius: 8, border: 'none', cursor: 'pointer', fontWeight: '600', textDecoration: 'none' };
+    const logoImgStyle = { maxHeight: 40, width: 'auto' };
+    const menuBtnStyle = (isActive) => ({
+        width: '90%', margin: '8px auto', background: isActive ? '#c4b5fd' : '#f1f5f9', color: isActive ? '#333' : '#334155', padding: '10px', 
+        borderRadius: 8, border: 'none', fontSize: 15, display: 'block', cursor: 'pointer', textAlign: 'left', fontWeight: isActive ? 'bold' : 'normal'
+    });
     
+    // Mejorar Tarjeta de Display
     const displayCardStyle = {
-        width: '100%', height: 150, background: '#e9d5ff', borderRadius: 16, border: '2px solid #222', 
+        width: '100%', minHeight: 180, background: '#fff', borderRadius: 16, border: '1px solid #c4b5fd', 
         display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginBottom: 30,
-        boxShadow: '2px 2px 0px #000'
+        boxShadow: '0 4px 15px rgba(167, 139, 250, 0.1)',
+        borderLeft: '5px solid #a78Bfa'
     };
 
+    // Mejorar Estilos de Formulario
     const inputStyle = {
         width: '100%', padding: '12px', borderRadius: 8, background: '#e5e7eb', 
-        border: '2px solid #222', fontSize: 16, outline: 'none'
+        border: '1px solid #cbd5e1', fontSize: 16, outline: 'none'
     };
+    
+    const labelStyle = { width: 150, fontWeight: 'bold', fontSize: 16, color: '#475569' };
+    
+    const updateButtonStyle = { 
+        width: '100%', padding: '15px', background: '#a78Bfa', color: '#fff', border: 'none', 
+        borderRadius: 12, fontSize: 18, fontWeight: 'bold', cursor: 'pointer', marginTop: 20,
+        boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+    };
+    
+    // Status color
+    const getStatusColor = (kg) => {
+        if (kg < 5) return '#dc2626'; // Red - Crítico
+        if (kg < 10) return '#fb923c'; // Orange - Bajo
+        return '#10b981'; // Green - Normal
+    };
+    
+    const statusColor = getStatusColor(cantidadActual);
 
     return (
-        <div style={{ minHeight: '100vh', background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={PAGE_CONTAINER}>
             
             {/* Barra Superior */}
-            <div style={{ width: 650, display: 'flex', justifyContent: 'space-between', marginTop: 20, marginBottom: 40 }}>
-                <button style={topBtnStyle} onClick={() => navigate('/bienvenida')}>Soporte</button>
-                <button style={{ ...topBtnStyle, background: '#7dd3fc', padding: '10px 55px' }}>Logo</button>
-                <button style={topBtnStyle} onClick={handleLogout}>Exit</button>
+            <div style={{ width: 900, display: 'flex', justifyContent: 'space-between', marginTop: 20, marginBottom: 40 }}>
+                <Link to="/bienvenida" style={topBtnStyle}>Regresar</Link>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <img src={logoCafe} alt="Logo" style={logoImgStyle} />
+                </div>
+                <button style={{...topBtnStyle, background: '#ef4444'}} onClick={handleLogout}>Exit</button>
             </div>
 
             <div style={{ width: 900, display: 'flex', justifyContent: 'space-between' }}>
                 
                 {/* Menú Lateral */}
-                <div style={{ position: 'relative', width: 200 }}>
-                    <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: '#a78Bfa', padding: 10, borderRadius: 8, width: 48, fontSize: 18, border: 'none', cursor: 'pointer' }}>≡</button>
+                <div style={{ position: 'relative', width: 220, paddingRight: 20 }}>
+                    <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: '#a78Bfa', color: '#fff', padding: 10, borderRadius: 8, width: 48, fontSize: 18, border: 'none', cursor: 'pointer' }}>≡</button>
                     {menuOpen && (
-                        <div style={{ position: 'absolute', top: 45, width: 190, background: '#f3f4f6', borderRadius: 12, padding: '10px 0', boxShadow: '0 2px 12px #0001', zIndex: 10 }}>
-                             <button style={menuBtnStyle} onClick={() => navigate('/bienvenida')}>Inicio</button>
-                             <button style={menuBtnStyle} onClick={() => navigate('/pedidos-anteriores')}>Pedidos Anteriores</button>
-                             <button style={menuBtnStyle} onClick={() => navigate('/pagos')}>Pagos</button>
-                             <button style={menuBtnStyle} onClick={() => navigate('/predicciones')}>Predicciones</button>
-                             <button style={{...menuBtnStyle, background: '#c4b5fd'}}>Inventario</button>
+                         <div style={{ position: 'absolute', top: 45, width: 190, background: '#fff', borderRadius: 12, padding: '5px 0', boxShadow: '0 4px 15px rgba(0,0,0,0.1)', zIndex: 10 }}>
+                             <button style={menuBtnStyle(false)} onClick={() => navigate('/bienvenida')}>Inicio</button>
+                             <button style={menuBtnStyle(false)} onClick={() => navigate('/pedidos-anteriores')}>Pedidos Anteriores</button>
+                             <button style={menuBtnStyle(false)} onClick={() => navigate('/pagos')}>Pagos</button>
+                             <button style={menuBtnStyle(false)} onClick={() => navigate('/predicciones')}>Predicciones</button>
+                             <button style={menuBtnStyle(true)}>Inventario</button>
                         </div>
                     )}
                 </div>
 
                 {/* Área Central */}
                 <div style={{ flex: 1, maxWidth: 500, margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <h2 style={{ fontFamily: 'cursive', marginBottom: 20, fontSize: 32 }}>Inventario</h2>
+                    <h2 style={{ color: '#1e293b', marginBottom: 20, fontSize: 32 }}>📦 Mi Inventario</h2>
 
                     {/* Tarjeta de Cantidad Actual */}
-                    <div style={displayCardStyle}>
-                        <span style={{ fontSize: 18, fontWeight: '500', color: '#4b5563', marginBottom: 10 }}>Cantidad Actual Total</span>
-                        <span style={{ fontSize: 40, fontWeight: 'bold', color: '#1f2937' }}>
-                            {loading ? '...' : `${cantidadActual} Kg`}
+                    <div style={{...displayCardStyle, borderLeft: `5px solid ${statusColor}`}}>
+                        <span style={{ fontSize: 16, fontWeight: '500', color: '#6b7280', marginBottom: 10 }}>STOCK ACTUAL</span>
+                        <span style={{ fontSize: 48, fontWeight: 'bold', color: statusColor }}>
+                            {loading ? '...' : `${cantidadActual} `} <span style={{fontSize: 24}}>Kg</span>
                         </span>
-                        <span style={{ fontSize: 12, color: '#666' }}>(Anterior: {ultimaCantidad} Kg)</span>
+                        <span style={{ fontSize: 12, color: '#666' }}>(Último registro: {ultimaCantidad} Kg)</span>
                     </div>
 
-                    <h3 style={{ fontFamily: 'cursive', fontSize: 24, marginBottom: 20 }}>Actualizar Inventario</h3>
+                    <h3 style={{ color: '#475569', fontSize: 24, marginBottom: 20 }}>Actualizar Stock</h3>
 
                     {/* Formulario */}
-                    <div style={{ width: '100%' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: 15 }}>
-                            <label style={{ width: 150, fontWeight: 'bold', fontFamily: 'cursive', fontSize: 18 }}>Cantidad Molido</label>
+                    <div style={{ width: '100%', background: '#fff', padding: 30, borderRadius: 12, boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: 20 }}>
+                            <label style={labelStyle}>Molido (Kg)</label>
                             <input 
                                 type="number" 
                                 style={inputStyle} 
                                 value={inputMolido}
                                 onChange={(e) => setInputMolido(e.target.value)}
-                                placeholder="Kg"
+                                placeholder="0"
                             />
                         </div>
 
                         <div style={{ display: 'flex', alignItems: 'center', marginBottom: 30 }}>
-                            <label style={{ width: 150, fontWeight: 'bold', fontFamily: 'cursive', fontSize: 18 }}>Cantidad Grano</label>
+                            <label style={labelStyle}>Grano (Kg)</label>
                             <input 
                                 type="number" 
                                 style={inputStyle} 
                                 value={inputGrano}
                                 onChange={(e) => setInputGrano(e.target.value)}
-                                placeholder="Kg"
+                                placeholder="0"
                             />
                         </div>
 
-                        <button 
-                            onClick={handleUpdate}
-                            style={{ 
-                                width: '100%', padding: '15px', background: '#c4b5fd', border: '2px solid #222', borderRadius: 12,
-                                fontSize: 18, fontWeight: 'bold', cursor: 'pointer', boxShadow: '2px 2px 0px #000'
-                            }}
-                        >
+                        <button onClick={handleUpdate} style={updateButtonStyle}>
                             Actualizar
                         </button>
 
-                        {message && <p style={{ textAlign: 'center', marginTop: 20, fontWeight: 'bold' }}>{message}</p>}
+                        {message && <p style={{ textAlign: 'center', marginTop: 20, fontWeight: 'bold', color: message.includes('✅') ? '#10b981' : '#dc2626' }}>{message}</p>}
                     </div>
                 </div>
 
                 {/* Espaciador derecho */}
-                <div style={{ width: 200 }}></div>
+                <div style={{ width: 220 }}></div>
             </div>
         </div>
     );

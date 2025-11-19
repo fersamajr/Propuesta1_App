@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api/api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import logoCafe from '../assets/logo-cafe-tech.png';
 
 function PedidosAnteriores() {
     const navigate = useNavigate();
@@ -9,7 +10,6 @@ function PedidosAnteriores() {
     const [error, setError] = useState('');
     const [menuOpen, setMenuOpen] = useState(false);
 
-    // Función de Cerrar Sesión
     const handleLogout = () => {
         localStorage.removeItem('token');
         navigate('/login', { replace: true });
@@ -44,14 +44,22 @@ function PedidosAnteriores() {
     }, []);
 
     // --- Estilos ---
-    const topBtnStyle = { background: '#a78Bfa', color: '#222', padding: '10px 30px', borderRadius: 8, border: 'none', cursor: 'pointer' };
-    const menuBtnStyle = { width: '90%', margin: '8px auto', background: '#a78Bfa', color: '#222', padding: '10px', borderRadius: 8, border: 'none', fontSize: 15, display: 'block', cursor: 'pointer' };
-    const cardStyle = {
-        width: '100%', maxWidth: 800, background: '#f5f3ff', borderRadius: 16, border: '2px solid #d1d5db', padding: 32,
-        boxShadow: '0 2px 12px #0001', minHeight: 400, display: 'flex', flexDirection: 'column', alignItems: 'center'
+    const PAGE_CONTAINER = { minHeight: '100vh', background: '#f8fafc', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' };
+    const topBtnStyle = { background: '#a78Bfa', color: '#fff', padding: '10px 20px', borderRadius: 8, border: 'none', cursor: 'pointer', fontWeight: '600', textDecoration: 'none' };
+    const logoImgStyle = { maxHeight: 40, width: 'auto' };
+    
+    // Mejorar estilos del menú lateral para consistencia
+    const menuBtnStyle = (isActive) => ({
+        width: '90%', margin: '8px auto', background: isActive ? '#c4b5fd' : '#f1f5f9', color: isActive ? '#333' : '#334155', padding: '10px', 
+        borderRadius: 8, border: 'none', fontSize: 15, display: 'block', cursor: 'pointer', textAlign: 'left', fontWeight: isActive ? 'bold' : 'normal',
+        transition: 'background 0.2s'
+    });
+    
+    const cardContainerStyle = {
+        width: '100%', maxWidth: 800, background: '#fff', borderRadius: 16, border: '1px solid #d1d5db', padding: 32,
+        boxShadow: '0 4px 15px rgba(0,0,0,0.05)', minHeight: 400, display: 'flex', flexDirection: 'column', alignItems: 'center'
     };
     
-    // ✅ ESTILO ACTUALIZADO: Cursor de mano y transición suave
     const itemStyle = {
         width: '100%', 
         background: '#fff', 
@@ -62,45 +70,63 @@ function PedidosAnteriores() {
         display: 'flex', 
         justifyContent: 'space-between', 
         alignItems: 'center',
-        cursor: 'pointer', // ⬅️ Indica que es clicable
-        transition: 'transform 0.1s, background-color 0.2s' 
+        cursor: 'pointer',
+        transition: 'transform 0.1s, background-color 0.2s, box-shadow 0.2s'
+    };
+    
+    // Estilo para el hover de los ítems
+    const itemHoverStyle = {
+        backgroundColor: '#f9fafb',
+        transform: 'translateY(-2px)',
+        boxShadow: '0 4px 10px rgba(0,0,0,0.05)'
+    };
+    
+    // Helper para los Badges
+    const getBadgeStyle = (isPositive, text) => {
+        const base = { padding: '4px 8px', borderRadius: 6, fontSize: 12, fontWeight: 'bold', marginLeft: 5 };
+        if (text === 'PAGADO') return { ...base, background: '#dcfce7', color: '#16a34a' };
+        if (text === 'PENDIENTE PAGO') return { ...base, background: '#fff7ed', color: '#d97706' };
+        if (text === 'ENTREGADO') return { ...base, background: '#bfdbfe', color: '#1e40af' };
+        if (text === 'EN PROCESO') return { ...base, background: '#e5e7eb', color: '#374151' };
     };
 
     return (
-        <div style={{ minHeight: '100vh', background: '#fff', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={PAGE_CONTAINER}>
             
             {/* --- BARRA SUPERIOR --- */}
-            <div style={{ width: 650, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 40, marginTop: 20 }}>
-                <button style={topBtnStyle} onClick={() => navigate('/bienvenida')}>Volver</button>
-                <button style={{ ...topBtnStyle, background: '#7dd3fc', padding: '10px 55px' }}>Logo</button>
-                <button style={topBtnStyle} onClick={handleLogout}>Exit</button>
+            <div style={{ width: 900, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 40, marginTop: 20 }}>
+                <Link to="/bienvenida" style={topBtnStyle}>Volver</Link>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <img src={logoCafe} alt="Logo" style={logoImgStyle} />
+                </div>
+                <button style={{...topBtnStyle, background: '#ef4444'}} onClick={handleLogout}>Exit</button>
             </div>
 
             {/* --- CONTENEDOR PRINCIPAL --- */}
             <div style={{ width: 900, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                 
                 {/* MENÚ LATERAL */}
-                <div style={{ position: 'relative', width: 200 }}>
+                <div style={{ position: 'relative', width: 220, paddingRight: 20 }}>
                     <button
-                        style={{ background: '#a78Bfa', color: '#222', padding: 10, borderRadius: 8, marginBottom: 8, width: 48, fontSize: 18, border: 'none', cursor: 'pointer' }}
+                        style={{ background: '#a78Bfa', color: '#fff', padding: 10, borderRadius: 8, marginBottom: 8, width: 48, fontSize: 18, border: 'none', cursor: 'pointer' }}
                         onClick={() => setMenuOpen(s => !s)}
                     >
                         ≡
                     </button>
                     {menuOpen && (
-                        <div style={{ position: 'absolute', top: 45, left: 0, width: 190, background: '#f3f4f6', borderRadius: 12, boxShadow: '0 2px 12px #0001', padding: '10px 0', zIndex: 10 }}>
-                            <button style={menuBtnStyle} onClick={() => navigate('/bienvenida')}>Inicio</button>
-                            <button style={menuBtnStyle} onClick={() => navigate('/solicitud-pedido')}>Hacer Pedido</button>
-                            <button style={{...menuBtnStyle, background: '#c4b5fd'}}>Pedidos Anteriores</button>
+                        <div style={{ position: 'absolute', top: 45, left: 0, width: 190, background: '#fff', borderRadius: 12, boxShadow: '0 4px 15px rgba(0,0,0,0.1)', padding: '5px 0', zIndex: 10 }}>
+                            <button style={menuBtnStyle(false)} onClick={() => navigate('/bienvenida')}>Inicio</button>
+                            <button style={menuBtnStyle(false)} onClick={() => navigate('/solicitud-pedido')}>Hacer Pedido</button>
+                            <button style={menuBtnStyle(true)}>Pedidos Anteriores</button>
                         </div>
                     )}
                 </div>
 
                 {/* ÁREA CENTRAL */}
                 <div style={{ flex: 1, margin: '0 20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <h2 style={{ color: '#222', fontFamily: 'cursive', marginBottom: 20 }}>Pedidos Anteriores</h2>
+                    <h2 style={{ color: '#1e293b', fontFamily: 'serif', marginBottom: 20, fontSize: 32 }}>🛒 Historial de Pedidos</h2>
                     
-                    <div style={cardStyle}>
+                    <div style={cardContainerStyle}>
                         {loading ? (
                             <p>Cargando pedidos...</p>
                         ) : error ? (
@@ -109,47 +135,33 @@ function PedidosAnteriores() {
                             <p>No tienes pedidos registrados aún.</p>
                         ) : (
                             <div style={{ width: '100%', overflowY: 'auto', maxHeight: 500 }}>
-                                {pedidos.map((pedido) => (
-                                    <div 
-                                        key={pedido.id} 
-                                        style={itemStyle}
-                                        // ✅ EVENTO ONCLICK: Navega a la pantalla de detalle usando el ID
-                                        onClick={() => navigate(`/pedidos/${pedido.id}`)}
-                                        
-                                        // Opcional: Efecto visual simple al pasar el mouse
-                                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f9fafb'}
-                                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff'}
-                                    >
-                                        <div>
-                                            <div style={{ fontWeight: 'bold', color: '#4b5563' }}>
-                                                Fecha: {new Date(pedido.createdAt).toLocaleDateString()}
+                                {pedidos.map((pedido) => {
+                                    const statusPago = pedido.pagado ? 'PAGADO' : 'PENDIENTE PAGO';
+                                    const statusEntrega = pedido.entregado ? 'ENTREGADO' : 'EN PROCESO';
+                                    
+                                    return (
+                                        <div 
+                                            key={pedido.id} 
+                                            style={itemStyle}
+                                            onClick={() => navigate(`/pedidos/${pedido.id}`)}
+                                            onMouseEnter={(e) => Object.assign(e.currentTarget.style, itemHoverStyle)}
+                                            onMouseLeave={(e) => Object.assign(e.currentTarget.style, {backgroundColor: '#fff', transform: 'translateY(0)', boxShadow: 'none'})}
+                                        >
+                                            <div>
+                                                <div style={{ fontWeight: 'bold', color: '#475569', fontSize: 16 }}>
+                                                    Pedido #...{pedido.id.slice(-5)}
+                                                </div>
+                                                <div style={{ fontSize: 14, color: '#6b7280', marginTop: 3 }}>
+                                                    Entrega estimada: <strong>{pedido.fechaEntrega ? new Date(pedido.fechaEntrega).toLocaleDateString() : 'Pendiente'}</strong>
+                                                </div>
                                             </div>
-                                            <div style={{ fontSize: 14, color: '#6b7280' }}>
-                                                Entrega estimada: {pedido.fechaEntrega ? new Date(pedido.fechaEntrega).toLocaleDateString() : 'Pendiente'}
+                                            <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', gap: 5 }}>
+                                                <span style={getBadgeStyle(pedido.pagado, statusPago)}>{statusPago}</span>
+                                                <span style={getBadgeStyle(pedido.entregado, statusEntrega)}>{statusEntrega}</span>
                                             </div>
-                                            {pedido.notas && (
-                                                <div style={{ fontSize: 13, fontStyle: 'italic', color: '#888' }}>"{pedido.notas}"</div>
-                                            )}
                                         </div>
-                                        <div style={{ textAlign: 'right' }}>
-                                            <span style={{ 
-                                                padding: '4px 8px', borderRadius: 4, fontSize: 12, fontWeight: 'bold',
-                                                background: pedido.pagado ? '#bbf7d0' : '#fecaca',
-                                                color: pedido.pagado ? '#166534' : '#991b1b',
-                                                marginRight: 5
-                                            }}>
-                                                {pedido.pagado ? 'PAGADO' : 'PENDIENTE PAGO'}
-                                            </span>
-                                            <span style={{ 
-                                                padding: '4px 8px', borderRadius: 4, fontSize: 12, fontWeight: 'bold',
-                                                background: pedido.entregado ? '#bfdbfe' : '#e5e7eb',
-                                                color: pedido.entregado ? '#1e40af' : '#374151'
-                                            }}>
-                                                {pedido.entregado ? 'ENTREGADO' : 'EN PROCESO'}
-                                            </span>
-                                        </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         )}
                     </div>

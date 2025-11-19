@@ -1,7 +1,7 @@
 // src/App.jsx
 
-import React, { useEffect } from 'react'; // ⬅️ Añadir useEffect
-import { BrowserRouter as Router, Route, Routes, Link, useNavigate } from 'react-router-dom'; // ⬅️ Añadir useNavigate
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link, useNavigate } from 'react-router-dom';
 import Login from './pages/Login'; 
 import Bienvenida from './pages/Bienvenida';
 import Contacto from './pages/Contacto';
@@ -27,7 +27,7 @@ import AdminPlaneador from './pages/admin/AdminPlaneador';
 import AdminBroadcast from './pages/admin/AdminBroadcast';
 
 // -------------------------------------------------------------
-// 🆕 1. COMPONENTE DE REDIRECCIÓN CONDICIONAL (AuthRedirect)
+// COMPONENTE DE REDIRECCIÓN CONDICIONAL (AuthRedirect)
 // -------------------------------------------------------------
 function AuthRedirect({ children }) {
     const navigate = useNavigate();
@@ -47,7 +47,7 @@ function AuthRedirect({ children }) {
 
 
 // -------------------------------------------------------------
-// 2. COMPONENTE HOME (Corregido el Link de "Iniciar sesión")
+// COMPONENTE HOME (Ahora usa el CSS Module limpio)
 // -------------------------------------------------------------
 function Home() {
   return (
@@ -65,7 +65,6 @@ function Home() {
           />
         </Link>
         
-        {/* ⬅️ CAMBIO: La ruta de "Iniciar sesión" debe apuntar al formulario de login */}
         <Link to="/login" className={styles.navLink}>
           Iniciar sesión
         </Link>
@@ -81,7 +80,7 @@ function Home() {
 
 
 // -------------------------------------------------------------
-// 3. COMPONENTE APP (Aplicación del AuthRedirect)
+// COMPONENTE APP
 // -------------------------------------------------------------
 function App() {
     return (
@@ -94,17 +93,18 @@ function App() {
                     <Route path='/Contacto' element={<Contacto />}/>
                     <Route path='/solicitud-pedido' element={<SolicitudPedidoForm />}/>
                     <Route path='/pedidos-anteriores' element={<PedidosAnteriores />}/>
-                    <Route path='/predicciones' element={<Predicciones />}/> {/* ⬅️ Nueva Ruta */}
-                    {/* ⬅️ 2. NUEVA RUTA DINÁMICA */}
+                    <Route path='/predicciones' element={<Predicciones />}/>
                     <Route path='/pedidos/:id' element={<DetallePedido />}/>
-                    <Route path='/inventario' element={<Inventario />}/> {/* ⬅️ Nueva Ruta */}
-                    <Route path='/pagos' element={<Pagos />}/> {/* ⬅️ Nueva ruta */} 
+                    <Route path='/inventario' element={<Inventario />}/>
+                    <Route path='/pagos' element={<Pagos />}/>
                     <Route path='/analisis-negocio' element={<AnalisisNegocio />}/>
+                    
+                    {/* Rutas de Admin (sin modificar contenido) */}
                     <Route path='/admin' element={<AdminDashboard />} />
                     <Route path='/admin/pedidos' element={<AdminPedidos />} />
-                    <Route path='/admin/solicitudes' element={<AdminSolicitudes />} /> {/* ⬅️ Nueva Ruta */}
-                    <Route path='/admin/clientes' element={<AdminClientes />} /> {/* ⬅️ Nueva Ruta */}
-                    <Route path='/admin/pagos' element={<AdminPagos />} /> {/* ⬅️ Nueva Ruta */}
+                    <Route path='/admin/solicitudes' element={<AdminSolicitudes />} />
+                    <Route path='/admin/clientes' element={<AdminClientes />} />
+                    <Route path='/admin/pagos' element={<AdminPagos />} />
                     <Route path='/admin/saldos' element={<AdminSaldos />} />
                     <Route path='/admin/predicciones' element={<AdminPredicciones />} />
                     <Route path='/admin/desviaciones' element={<AdminDesviaciones />} />

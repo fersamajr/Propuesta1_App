@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import api from '../api/api'; 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import styles from '../Home.module.css'; 
+import logoCafe from '../assets/logo-cafe-tech.png';
 
 function Login({ onLoginSuccess }) {
     const navigate = useNavigate();
@@ -13,10 +15,7 @@ function Login({ onLoginSuccess }) {
         setError('');
 
         try {
-            // 1. Petición de Login
             const response = await api.post('/auth/login', { email, password });
-            
-            // Tu backend devuelve: { accessToken, refreshToken, user: { ... rol ... } }
             const { accessToken, user } = response.data;
 
             if (!accessToken) {
@@ -24,18 +23,13 @@ function Login({ onLoginSuccess }) {
                 return;
             }
 
-            // 2. Guardar Token
             localStorage.setItem('token', accessToken);
             if (onLoginSuccess) onLoginSuccess(accessToken);
 
-            // 3. 🔍 VERIFICACIÓN DE ROL DIRECTA
-            // "El rol viene desde user" -> Usamos user.rol directamente de la respuesta
-            console.log('Usuario logueado:', user);
-
             if (user && user.rol === 'Admin') {
-                navigate('/admin'); // Panel de Administrador
+                navigate('/admin');
             } else {
-                navigate('/bienvenida'); // Panel de Cliente
+                navigate('/bienvenida');
             }
 
         } catch (err) {
@@ -44,30 +38,92 @@ function Login({ onLoginSuccess }) {
         }
     };
 
+    // --- Estilos CSS en el componente (Para el Formulario) ---
+    const formCardStyle = { 
+        width: 380, 
+        background: '#fff', 
+        borderRadius: 16, 
+        border: '1px solid #d1d5db', 
+        padding: 32, 
+        boxShadow: '0 8px 20px rgba(0,0,0,0.1)', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'center' 
+    };
+    
+    const welcomeBannerStyle = { 
+        background: '#f5f3ff', 
+        borderRadius: 8, 
+        marginBottom: 18, 
+        padding: '10px 0', 
+        width: '100%', 
+        textAlign: 'center', 
+        fontWeight: 'bold',
+        color: '#6d28d9'
+    };
+    
+    const inputStyle = { 
+        width: '100%', 
+        padding: 12, 
+        marginBottom: 18, 
+        borderRadius: 8, 
+        background: '#f8fafc', 
+        fontSize: 16, 
+        border: '1px solid #d1d5db' 
+    };
+    
+    const submitButtonStyle = { 
+        width: '100%', 
+        background: '#a78Bfa', 
+        color: '#fff',
+        padding: 14, 
+        borderRadius: 8, 
+        fontWeight: 'bold', 
+        fontSize: 16, 
+        border: 'none', 
+        marginBottom: 12,
+        cursor: 'pointer',
+        transition: 'background 0.2s'
+    };
+    
+    const secondaryButtonStyle = { 
+        width: '100%', 
+        background: '#e0e7ff',
+        color: '#4f46e5',
+        padding: 10, 
+        borderRadius: 8, 
+        fontSize: 14, 
+        border: 'none',
+        cursor: 'pointer',
+        transition: 'background 0.2s'
+    };
+
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            {/* Barra superior */}
-            <div style={{ width: 500, display: 'flex', justifyContent: 'space-between', marginBottom: 40 }}>
-                <button style={{ background: '#a78Bfa', color: '#222', padding: '10px 30px', borderRadius: 8 }} onClick={() => navigate('/contacto')}>Contactanos</button>
-                <button style={{ background: '#7dd3fc', color: '#222', padding: '10px 55px', borderRadius: 8 }}>Logo</button>
-                <button style={{ background: '#a78Bfa', color: '#222', padding: '10px 30px', borderRadius: 8 }} onClick={() => navigate('/')}>Inicio</button>
-            </div>
+        <div style={{ minHeight: '100vh', background: '#f1f5f9', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            {/* Barra superior (Usando Home.module.css) */}
+            <nav className={styles.topBar} style={{width: 550, borderBottom: 'none'}}> 
+                <Link to="/contacto" className={styles.navLink}>Contáctanos</Link>
+                <Link to="/" className={styles.logoLink}>
+                    <img src={logoCafe} alt="Logo de Café" className={styles.logo} />
+                </Link>
+                <Link to="/" className={styles.navLink}>Inicio</Link>
+            </nav>
             
             {/* Card central */}
-            <div style={{ width: 350, background: '#fff', borderRadius: 16, border: '2px solid #d1d5db', padding: 32, boxShadow: '0 2px 12px #0001', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <div style={{ background: '#f5f3ff', borderRadius: 8, marginBottom: 18, padding: '10px 0', width: '100%', textAlign: 'center', fontWeight: 500 }}>Hola de regreso :)</div>
+            <div style={formCardStyle}>
+                <div style={welcomeBannerStyle}>👋 Hola de regreso :)</div>
                 <form style={{ width: '100%' }} onSubmit={handleSubmit}>
-                    <label style={{ marginBottom: 4, display: 'block', fontWeight: 500 }}>Email</label>
-                    <input type="email" value={email} onChange={e => setEmail(e.target.value)} style={{ width: '100%', padding: '10px', marginBottom: 16, borderRadius: 8, background: '#e5e7eb', fontSize: 16, border: '1px solid #d1d5db' }} required />
+                    <label style={{ marginBottom: 4, display: 'block', fontWeight: 'bold', color: '#475569' }}>Email</label>
+                    <input type="email" value={email} onChange={e => setEmail(e.target.value)} style={inputStyle} required />
                     
-                    <label style={{ marginBottom: 4, display: 'block', fontWeight: 500 }}>Contraseña</label>
-                    <input type="password" value={password} onChange={e => setPassword(e.target.value)} style={{ width: '100%', padding: '10px', marginBottom: 20, borderRadius: 8, background: '#e5e7eb', fontSize: 16, border: '1px solid #d1d5db' }} required />
+                    <label style={{ marginBottom: 4, display: 'block', fontWeight: 'bold', color: '#475569' }}>Contraseña</label>
+                    <input type="password" value={password} onChange={e => setPassword(e.target.value)} style={inputStyle} required />
                     
-                    <button type="submit" style={{ width: '100%', background: '#a78Bfa', color: '#222', padding: '12px', borderRadius: 8, fontWeight: 500, fontSize: 16, border: 'none', marginBottom: 12 }}>Ingresar</button>
+                    <button type="submit" style={submitButtonStyle}>Ingresar</button>
                     
-                    {error && <div style={{ color: 'red', textAlign: 'center', marginBottom: 8 }}>{error}</div>}
+                    {error && <div style={{ color: '#dc2626', textAlign: 'center', marginBottom: 8, fontSize: 14 }}>{error}</div>}
                 </form>
-                <button style={{ width: '100%', background: '#c4b5fd', color: '#222', padding: '7px', borderRadius: 8, fontSize: 14, border: 'none' }}>Olvidé mi contraseña</button>
+                <button style={secondaryButtonStyle}>Olvidé mi contraseña</button>
             </div>
         </div>
     );
