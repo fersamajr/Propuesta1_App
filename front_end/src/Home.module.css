@@ -1,87 +1,75 @@
-/* Home.module.css */
+/* src/Home.module.css (Usado para el Home y base de navegación) */
 
 /* Contenedor principal de la página */
 .container {
-    .logo {
-  /* Quitamos el background-color si la imagen ya tiene su propio fondo o transparencia */
-  /* background-color: #7dd3fc; */ 
-  /* color: #0d2137; */ 
-  padding: 0; /* Quitamos el padding si la imagen ya tiene el tamaño deseado */
-  border-radius: 0; /* Quitamos el border-radius si no es un botón de texto */
-    
-    /* Definimos un tamaño fijo para la imagen del logo */
-    width: 735px; /* Ancho del grano de café */
-    height: 181px; /* Altura automática para mantener la proporción */
-    display: flex; /* Para centrar la imagen si es necesario */
-    justify-content: center;
-    align-items: center;
-    }
-
-    /* Si quieres que el logo sea cliqueable y tenga algún efecto, puedes añadir esto: */
-    .logoLink {
-    display: flex; /* Para que la imagen ocupe el espacio */
-    justify-content: center;
-    align-items: center;
-    padding: 5px; /* Pequeño padding alrededor del logo si quieres */
-    border-radius: 50%; /* Si quieres que el área alrededor del logo sea redonda */
-    transition: background-color 0.3s ease;
-    }
-
-.logoLink:hover {
-  background-color: rgba(125, 211, 252, 0.2); /* Fondo suave al pasar el mouse */
-}
     padding: 20px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    min-height: 100vh; /* Ocupa al menos toda la altura de la pantalla */
-    background-color: #f8f9fa; /* Un fondo gris muy claro */
-    }
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    min-height: 100vh;
+    background-color: #f8fafc; /* Fondo gris muy claro */
+}
 
-    /* Barra de navegación superior */
-    .topBar {
+/* ------------------ BARRA DE NAVEGACIÓN (HEADER) ------------------ */
+
+.topBar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-bottom: 20px;
-    border-bottom: 1px solid #dee2e6; /* Línea divisoria sutil */
+    border-bottom: 1px solid #dee2e6;
     margin-bottom: 40px;
-    }
+}
 
-    /* Estilo para los links de navegación */
-    .navLink {
-    background-color: #a78Bfa; /* Color lila */
+/* Estilo general para todos los botones/links de navegación */
+.navLink {
+    background-color: #a78Bfa; /* Lila principal */
     color: #ffffff;
     padding: 10px 20px;
     margin: 0 10px;
     border-radius: 8px;
-    text-decoration: none; /* Quita el subrayado del Link */
+    text-decoration: none; 
     font-weight: 600;
     font-size: 0.9rem;
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Efecto suave */
-    }
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+}
 
-    /* Efecto al pasar el mouse */
-    .navLink:hover {
-    background-color: #8b5cf6; /* Un lila más oscuro */
-    transform: translateY(-2px); /* Eleva un poco el botón */
+.navLink:hover {
+    background-color: #8b5cf6; /* Lila más oscuro */
+    transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
+}
 
-    /* Estilo para el "Logo" */
-    .logo {
-    background-color: #7dd3fc; /* Color azul claro */
-    color: #0d2137; /* Color de texto oscuro */
-    padding: 10px 25px;
-    border-radius: 8px;
-    font-weight: 700;
-    font-size: 1.1rem;
-    }
+/* Contenedor del Logo */
+.logoLink {
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    padding: 5px; 
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
 
-    /* Área "Hero" central */
-    .heroSection {
+.logoLink:hover {
+    transform: scale(1.05);
+}
+
+/* Estilo para la imagen del Logo */
+.logo {
+    max-height: 50px; /* Tamaño de logo de header */
+    width: auto; 
+}
+
+/* ------------------ SECCIÓN HERO (Solo para la página Home /) ------------------ */
+
+.heroSection {
     margin: 40px auto;
     padding: 50px 40px;
-    background-color: #ffffff; /* Fondo blanco */
-    border: 1px solid #7dd3fc; /* Borde con el color azul */
+    background-color: #ffffff; 
+    border: 1px solid #c7d2fe;
     border-radius: 15px;
     color: #222;
     text-align: center;
@@ -90,16 +78,16 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    box-shadow: 0 6px 20px rgba(125, 211, 252, 0.3); /* Sombra suave del color azul */
-    }
+    box-shadow: 0 10px 30px rgba(167, 139, 250, 0.1);
+}
 
-    .heroSection h2 {
+.heroSection h2 {
     margin-top: 0;
     font-size: 2.2rem;
-    color: #1e3a8a; /* Azul oscuro */
-    }
+    color: #1e3a8a; 
+}
 
-    .heroSection p {
+.heroSection p {
     font-size: 1.1rem;
     color: #555;
     line-height: 1.6;
