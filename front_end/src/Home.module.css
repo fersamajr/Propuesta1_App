@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* src/Home.module.css */
 
 /* Keyframes de animación */
@@ -41,6 +42,16 @@
     z-index: 0;
     pointer-events: none;
     display: block;
+=======
+/* src/Home.module.css (Usado para el Home y base de navegación) */
+
+/* Contenedor principal de la página */
+.container {
+    padding: 20px;
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    min-height: 100vh;
+    background-color: #f8fafc; /* Fondo gris muy claro */
+>>>>>>> 28a3158b7b7b91bf1d58993e34678f55fa3e99ec
 }
 
 /* ------------------ BARRA DE NAVEGACIÓN (HEADER) ------------------ */
@@ -49,6 +60,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+<<<<<<< HEAD
     padding: 15px 40px; 
     border-bottom: 1px solid #475569; /* Borde oscuro */
     margin-bottom: 60px; 
@@ -175,4 +187,83 @@
 
 .instagramIcon:hover {
     color: #7dd3fc;
+=======
+    padding-bottom: 20px;
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 40px;
+}
+
+/* Estilo general para todos los botones/links de navegación */
+.navLink {
+    background-color: #a78Bfa; /* Lila principal */
+    color: #ffffff;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 8px;
+    text-decoration: none; 
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+}
+
+.navLink:hover {
+    background-color: #8b5cf6; /* Lila más oscuro */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Contenedor del Logo */
+.logoLink {
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    padding: 5px; 
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.logoLink:hover {
+    transform: scale(1.05);
+}
+
+/* Estilo para la imagen del Logo */
+.logo {
+    max-height: 50px; /* Tamaño de logo de header */
+    width: auto; 
+}
+
+/* ------------------ SECCIÓN HERO (Solo para la página Home /) ------------------ */
+
+.heroSection {
+    margin: 40px auto;
+    padding: 50px 40px;
+    background-color: #ffffff; 
+    border: 1px solid #c7d2fe;
+    border-radius: 15px;
+    color: #222;
+    text-align: center;
+    max-width: 600px;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(167, 139, 250, 0.1);
+}
+
+.heroSection h2 {
+    margin-top: 0;
+    font-size: 2.2rem;
+    color: #1e3a8a; 
+}
+
+.heroSection p {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.6;
+>>>>>>> 28a3158b7b7b91bf1d58993e34678f55fa3e99ec
 }

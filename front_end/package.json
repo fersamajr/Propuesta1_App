@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+<<<<<<< HEAD
     "@fortawesome/free-brands-svg-icons": "^7.1.0",
     "@fortawesome/react-fontawesome": "^3.1.0",
+=======
+>>>>>>> 28a3158b7b7b91bf1d58993e34678f55fa3e99ec
     "axios": "^0.27.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
