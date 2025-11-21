@@ -44,112 +44,217 @@ function Contacto() {
         }
     };
 
-    // --- Estilos CSS en el componente (Para el Formulario) ---
-    const formContainerStyle = { 
-        width: 400,
-        background: '#fff', 
-        padding: 40,
-        borderRadius: 16, 
-        boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
-        border: '1px solid #e5e7eb'
+    // --- ESTILOS CONSISTENTES CON EL DASHBOARD ---
+
+    // 1. CSS Global COMPLETO para Inyección
+    const fullCssInjection = `
+        /* Keyframes para el movimiento del gradiente */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Keyframes para el movimiento sutil de la textura de puntos */
+        @keyframes moveDots {
+            0% { background-position: 0 0; }
+            100% { background-position: 400px 400px; }
+        }
+        
+        /* Aplica la textura de puntos como un pseudo-elemento animado */
+        .animated-background-dots::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(#ffffff20 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: moveDots 60s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+    `;
+
+    const PAGE_CONTAINER = { 
+        minHeight: '100vh', 
+        background: 'linear-gradient(270deg, #1e293b, #1e293b, #1e293b)', 
+        backgroundSize: '400% 400%',
+        animation: 'gradientShift 20s ease infinite',
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        position: 'relative',
+        overflow: 'hidden'
     };
     
+    const navBarButtonStyle = { 
+        background: '#7dd3fc', 
+        color: '#1e293b', 
+        padding: '10px 25px', 
+        borderRadius: 25, 
+        border: '1px solid #7dd3fc', 
+        fontWeight: 'bold',
+        cursor: 'pointer',
+        textDecoration: 'none',
+        transition: 'all 0.3s ease',
+        boxShadow: '0 2px 5px rgba(0,0,0,0.3)',
+        ':hover': {
+            background: '#3b82f6', 
+            color: '#fff',
+            transform: 'translateY(-1px)'
+        }
+    };
+    
+    // Tarjeta del Formulario
+    const formCardStyle = { 
+        width: 550, 
+        background: 'rgba(51, 65, 85, 0.95)', 
+        backdropFilter: 'blur(5px)', 
+        borderRadius: 20, 
+        border: '2px solid #475569', 
+        padding: 40, 
+        boxShadow: '0 12px 30px rgba(0,0,0,0.6)', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'center',
+        zIndex: 10, 
+        color: '#cbd5e1' 
+    };
+    
+    // Título en Recuadro Morado
+    const titleBoxStyle = {
+        background: '#a78Bfa', 
+        color: '#1e293b', 
+        borderRadius: 15,
+        marginBottom: 35, 
+        padding: '15px 0',
+        width: '100%',
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 26,
+        letterSpacing: '0.5px',
+        boxShadow: '0 5px 15px rgba(0,0,0,0.3)',
+    };
+
+
     const inputStyle = { 
         width: '100%', 
-        padding: 12, 
-        borderRadius: 8, 
-        background: '#f8fafc',
-        border: '1px solid #d1d5db', 
-        fontSize: 16, 
-        transition: 'border-color 0.2s'
+        padding: 14, 
+        marginBottom: 25, 
+        borderRadius: 10, 
+        background: '#1e293b', 
+        fontSize: 18, 
+        border: '1px solid #475569',
+        color: '#fff',
+        transition: 'border-color 0.3s ease',
+        boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.3)',
+        fontFamily: 'inherit'
+    };
+    
+    // Botón Principal (Verde de Acento)
+    const submitButtonStyle = { 
+        width: '100%', 
+        background: loading ? '#475569' : '#10b981', 
+        color: loading ? '#94a3b8' : '#1e293b', 
+        padding: 18, 
+        borderRadius: 10, 
+        fontWeight: 'bold', 
+        fontSize: 20, 
+        border: 'none', 
+        marginTop: 15,
+        cursor: loading ? 'not-allowed' : 'pointer',
+        transition: 'background 0.3s ease, transform 0.2s ease',
+        boxShadow: '0 5px 15px rgba(0,0,0,0.4)',
+        opacity: loading ? 0.8 : 1,
+        ':hover': {
+            background: loading ? '#475569' : '#0e9e71',
+            transform: loading ? 'none' : 'translateY(-2px)'
+        }
     };
     
     const labelStyle = { 
-        display:'block', 
         marginBottom: 5, 
-        fontWeight:'bold', 
-        color:'#475569'
+        display: 'block', 
+        fontWeight: 'bold', 
+        color: '#a78Bfa', 
+        fontSize: 16 
     };
     
     const successStyle = { 
-        background: '#dcfce7', 
-        color: '#166534', 
+        background: '#10b981', 
+        color: '#1e293b', 
         padding: 30, 
         borderRadius: 10, 
         textAlign:'center', 
-        border: '1px solid #86efac' 
+        border: '1px solid #10b981',
+        boxShadow: '0 5px 15px rgba(16, 185, 129, 0.5)'
     };
-    
-    const submitButtonStyle = {
-        background: loading ? '#cbd5e1' : '#a78Bfa', 
-        color: '#fff',
-        width: '100%', 
-        padding: 14,
-        borderRadius: 8,
-        border: 'none',
-        fontWeight: 'bold',
-        cursor: loading ? 'not-allowed' : 'pointer',
-        transition: '0.2s'
-    };
+
 
     return (
-        <div style={{ minHeight: '100vh', background: '#f1f5f9', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            {/* Barra superior (Usando Home.module.css) */}
-            <nav className={styles.topBar} style={{width: 550, borderBottom: 'none'}}> 
-                <Link to="/" className={styles.navLink}>Inicio</Link>
-                <Link to="/" className={styles.logoLink}>
-                    <img src={logoCafe} alt="Logo de Café" className={styles.logo} />
-                </Link>
-                <Link to="/login" className={styles.navLink}>Iniciar sesión</Link>
-            </nav>
+        <div style={PAGE_CONTAINER} className="animated-background-dots">
+            {/* 1. Inyectar Keyframes y Pseudo-Elemento para la animación de fondo */}
+            <style>{fullCssInjection}</style>
 
-            {/* Contenido central */}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 40 }}>
-                <h2 style={{color: '#1e293b', fontSize: 32, marginBottom: 30}}>☕ Contáctanos</h2>
+            {/* Barra superior */}
+            <div style={{ width: 550, display: 'flex', justifyContent: 'space-around', marginBottom: 60, zIndex: 10 }}>
+                <Link to="/" style={navBarButtonStyle}>Inicio</Link>
+                <button style={{...navBarButtonStyle, background: '#a78Bfa', color: '#1e293b'}}>Contáctanos</button> 
+                <Link to="/login" style={navBarButtonStyle}>Iniciar sesión</Link>
+            </div>
+            
+            {/* Card central */}
+            <div style={formCardStyle}>
+                
+                {/* Título en Recuadro Morado */}
+                <div style={titleBoxStyle}>
+                    <span role="img" aria-label="waving hand">👋</span> ¡Contáctanos!
+                </div>
                 
                 {enviado ? (
                     <div style={successStyle}>
-                        <h3 style={{marginTop:0}}>¡Mensaje Enviado! 🚀</h3>
+                        <h3 style={{marginTop:0}}>¡Mensaje Enviado! ✅</h3>
                         <p>Gracias por escribirnos. Te responderemos a la brevedad.</p>
                         <small>Redirigiendo al inicio...</small>
                     </div>
                 ) : (
-                    <form onSubmit={handleSubmit} style={formContainerStyle}>
-                        <div style={{marginBottom: 15}}>
-                            <label style={labelStyle}>Nombre:</label>
-                            <input 
-                                type="text" 
-                                name="nombre"
-                                value={formData.nombre}
-                                onChange={handleChange}
-                                style={inputStyle} 
-                                required 
-                                placeholder="Tu nombre"
-                            />
-                        </div>
-                        <div style={{marginBottom: 15}}>
-                            <label style={labelStyle}>Email o Teléfono:</label>
-                            <input 
-                                type="text" 
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                style={inputStyle} 
-                                required 
-                                placeholder="contacto@ejemplo.com"
-                            />
-                        </div>
-                        <div style={{marginBottom: 20}}>
-                            <label style={labelStyle}>¿Cómo podemos ayudarte?</label>
-                            <textarea 
-                                name="mensaje"
-                                value={formData.mensaje}
-                                onChange={handleChange}
-                                style={{ ...inputStyle, minHeight: 120, fontFamily: 'inherit' }} 
-                                required 
-                                placeholder="Escribe tu mensaje aquí..."
-                            />
-                        </div>
+                    <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+                        
+                        <label style={labelStyle}>Nombre:</label>
+                        <input 
+                            type="text" 
+                            name="nombre"
+                            value={formData.nombre}
+                            onChange={handleChange}
+                            style={inputStyle} 
+                            required 
+                            placeholder="Tu nombre"
+                        />
+                        
+                        <label style={labelStyle}>Email o Teléfono:</label>
+                        <input 
+                            type="text" 
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            style={inputStyle} 
+                            required 
+                            placeholder="contacto@ejemplo.com"
+                        />
+                        
+                        <label style={labelStyle}>Mensaje:</label>
+                        <textarea 
+                            name="mensaje"
+                            value={formData.mensaje}
+                            onChange={handleChange}
+                            style={{ ...inputStyle, minHeight: 120, resize: 'vertical' }} 
+                            required 
+                            placeholder="Escribe tu mensaje aquí..."
+                        />
+                        
                         <button 
                             type="submit" 
                             disabled={loading}

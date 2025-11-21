@@ -1,11 +1,46 @@
-/* src/Home.module.css (Usado para el Home y base de navegación) */
+/* src/Home.module.css */
 
-/* Contenedor principal de la página */
+/* Keyframes de animación */
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+@keyframes moveDots {
+    0% { background-position: 0 0; }
+    100% { background-position: 400px 400px; }
+}
+
+/* Contenedor principal de la página (FONDO OSCURO Y ANIMADO) */
 .container {
-    padding: 20px;
+    padding: 0px;
     font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    min-height: 100vh;
-    background-color: #f8fafc; /* Fondo gris muy claro */
+    min-height: 100vh; 
+    /* Fondo Oscuro Animado de Contacto/Login */
+    background: linear-gradient(270deg, #1e293b, #334155, #1e293b); 
+    background-size: 400% 400%;
+    animation: gradientShift 20s ease infinite; 
+    position: relative;
+    color: #cbd5e1; /* Texto base claro */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Animación de Puntos (Activa y Oscura) */
+.container.animated-background-dots::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* 🚨 CRÍTICO: Cambio de color del gradiente para puntos más oscuros y visibles */
+    background-image: radial-gradient(#1e293b50 1px, transparent 1px); 
+    background-size: 40px 40px;
+    animation: moveDots 60s linear infinite;
+    z-index: 0;
+    pointer-events: none;
+    display: block;
 }
 
 /* ------------------ BARRA DE NAVEGACIÓN (HEADER) ------------------ */
@@ -14,81 +49,130 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #dee2e6;
-    margin-bottom: 40px;
+    padding: 15px 40px; 
+    border-bottom: 1px solid #475569; /* Borde oscuro */
+    margin-bottom: 60px; 
+    z-index: 10;
+    position: relative;
+    color: #cbd5e1; /* Texto claro */
+    font-size: 1.8rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
 }
 
-/* Estilo general para todos los botones/links de navegación */
+.navLinksRight {
+    display: flex;
+    gap: 25px;
+}
+
 .navLink {
-    background-color: #a78Bfa; /* Lila principal */
-    color: #ffffff;
-    padding: 10px 20px;
-    margin: 0 10px;
-    border-radius: 8px;
+    color: #cbeefe; /* Cian */
     text-decoration: none; 
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    border: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 40px;
+    font-weight: 500;
+    font-size: 1.5rem;
+    padding: 5px 0; 
+    transition: color 0.3s ease;
+}
+
+.navLink.login {
+    color: #b2b5e8; /* Lila */
+    font-weight: bold;
 }
 
 .navLink:hover {
-    background-color: #8b5cf6; /* Lila más oscuro */
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    color: #a78Bfa;
 }
 
-/* Contenedor del Logo */
-.logoLink {
-    display: flex; 
-    justify-content: center;
-    align-items: center;
-    padding: 5px; 
-    cursor: pointer;
-    transition: transform 0.2s ease;
+.logoLink, .logo {
+    display: none; 
 }
 
-.logoLink:hover {
-    transform: scale(1.05);
+
+/* ------------------ CUADRÍCULA DE TARJETAS (CASCADA VERTICAL) ------------------ */
+
+.cardsGrid {
+    display: block; 
+    max-width: 1000px;
+    margin: 0px auto; 
+    gap: 0;
+    flex-grow: 1;
+    z-index: 10;
+    position: relative;
 }
 
-/* Estilo para la imagen del Logo */
-.logo {
-    max-height: 50px; /* Tamaño de logo de header */
-    width: auto; 
-}
+.card {
+    width: 100%; 
+    margin-bottom: 0px; 
 
-/* ------------------ SECCIÓN HERO (Solo para la página Home /) ------------------ */
-
-.heroSection {
-    margin: 40px auto;
-    padding: 50px 40px;
-    background-color: #ffffff; 
-    border: 1px solid #c7d2fe;
-    border-radius: 15px;
-    color: #222;
-    text-align: center;
-    max-width: 600px;
-    min-height: 300px;
+    background-color: #334155; /* Fondo de Tarjeta Oscuro */
+    border: 2px solid #475569; 
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); 
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    box-shadow: 0 10px 30px rgba(167, 139, 250, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: auto; 
 }
 
-.heroSection h2 {
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+}
+
+.cardImage {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    filter: brightness(0.9); 
+    transition: filter 0.3s ease;
+    margin-bottom: 0px;
+}
+
+.cardContent {
+    padding: 15px;
+    flex-grow: 1;
+}
+
+.cardContent h3 {
+    color: #fdfdfd; /* Título Lila */
+    font-size: 1.6rem;
     margin-top: 0;
-    font-size: 2.2rem;
-    color: #1e3a8a; 
+    margin-bottom: 15px;
+    border-bottom: 1px solid #475569;
+    padding-bottom: 10px;
 }
 
-.heroSection p {
-    font-size: 1.1rem;
-    color: #555;
+.cardContent p {
+    color: #b4bcc7; /* Párrafo Gris claro */
+    font-size: 0.95rem;
     line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* ------------------ FOOTER ------------------ */
+
+.footer {
+    text-align: center;
+    padding: 30px;
+    margin-top: 50px;
+    border-top: 1px solid #475569;
+    color: #94a3b8; 
+    z-index: 10;
+    position: relative;
+}
+
+.footer p {
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+.instagramIcon {
+    font-size: 2.5rem;
+    color: #a78Bfa; 
+    transition: color 0.3s ease;
+}
+
+.instagramIcon:hover {
+    color: #7dd3fc;
 }
